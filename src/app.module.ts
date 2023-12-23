@@ -30,6 +30,9 @@ import { PermisoModule } from './permiso/permiso.module';
         "synchronize": false, //PRD false
         "autoLoadEntities": false,  //PRD false   */
         "entities": ["dist/**/*.entity{.ts,.js}"],
+        "extra": {
+          "encrypt": true // Habilitar la encriptación
+        },
         /* "logging": true, */
       }
     ),
