@@ -6,7 +6,7 @@ import { Person } from './entities/person.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { UpdatePersonPasswordDto } from './dto/update-person-password.dto';
-import * as bcrypt from 'bcrypt';
+import * as argon2 from "argon2";
 import { UpdatePersonAvatarDto } from './dto/update-person-avatar.dto';
 import { UserDto } from 'src/auth/dto/user.dto';
 
@@ -58,13 +58,13 @@ export class PersonService {
       select: { email: true, password: true, id: true}
     });
 
-    if ( !bcrypt.compareSync( oldPassword, userPerson.password ) )
+    if ( !argon2.verify( userPerson.password,oldPassword,) )
       throw new BadRequestException('Contraseña incorrecta.');
 
     if(newPassword.localeCompare(confirmPassword) != 0 )
       throw new BadRequestException('La nueva contraseña no coincide.');
 
-    userPerson.password = bcrypt.hashSync( newPassword, 10 );
+    userPerson.password = await argon2.hash(newPassword);
 
     await this.userRepository.save( userPerson )
 
