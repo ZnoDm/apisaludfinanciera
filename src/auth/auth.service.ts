@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository, getManager } from 'typeorm';
 
-import * as argon2 from "argon2";
+import * as bcrypt from 'bcrypt-nodejs';
 
 import { User } from '../users/entities/user.entity';
 import { LoginUserDto, CreateUserDto } from './dto';
@@ -52,7 +52,7 @@ export class AuthService {
       
       const user = this.userRepository.create({
         email,
-        password: await argon2.hash(password),
+        password: bcrypt.hashSync(password),
         person: savedPerson,
         roles: [ RolUser ]
       });
@@ -89,7 +89,7 @@ export class AuthService {
 
     if ( !user ) 
       throw new UnauthorizedException('Credentials are not valid (email)');
-    if ( !argon2.verify( user.password , password ) )
+    if ( !bcrypt.compareSync( password ,user.password ) )
       throw new UnauthorizedException('Credentials are not valid (password)');
 
     //*Limpiar data para mostrar
