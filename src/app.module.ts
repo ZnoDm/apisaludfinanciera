@@ -24,10 +24,10 @@ import { PermisoModule } from './permiso/permiso.module';
         "type": "mssql",
         "host": process.env.AZURE_HOST,
         "port": parseInt(process.env.AZURE_PORT),
-        "username": process.env.AZURE_USERNAME,
-        "password": process.env.AZURE_PASSWORD,
+        "username": "administrador",
+        "password": "Unix456nel!!",
         "database": process.env.AZURE_DATABASE,
-        "synchronize": false, //PRD false
+        "synchronize": true, //PRD false
         "autoLoadEntities": false,  //PRD false   */
         "entities": ["dist/**/*.entity{.ts,.js}"],
         "options": {
