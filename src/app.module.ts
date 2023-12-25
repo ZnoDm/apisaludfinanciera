@@ -27,7 +27,7 @@ import { PermisoModule } from './permiso/permiso.module';
         "username": "administrador",
         "password": "Unix456nel!!",
         "database": process.env.AZURE_DATABASE,
-        "synchronize": true, //PRD false
+        "synchronize": false, //PRD false
         "autoLoadEntities": true,  //PRD false   */
         "entities": ["dist/**/*.entity{.ts,.js}"],
         "options": {
