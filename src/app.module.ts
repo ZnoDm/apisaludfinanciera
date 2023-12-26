@@ -38,10 +38,6 @@ import { PermisoModule } from './permiso/permiso.module';
         /* "logging": true, */
       }
     ),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname,'..','public'),
-    }),
-
     AuthModule,
 
     PersonModule,
