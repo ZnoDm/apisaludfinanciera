@@ -2,33 +2,38 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PermisoService } from './permiso.service';
 import { CreatePermisoDto } from './dto/create-permiso.dto';
 import { UpdatePermisoDto } from './dto/update-permiso.dto';
+import { Permiso } from './entities/permiso.entity';
+import { Auth } from 'src/auth/decorators';
 
 @Controller('permiso')
 export class PermisoController {
   constructor(private readonly permisoService: PermisoService) {}
 
-  @Post()
-  create(@Body() createPermisoDto: CreatePermisoDto) {
-    return this.permisoService.create(createPermisoDto);
-  }
-
-  @Get()
+  
+  @Get('')
+  @Auth()
   findAll() {
     return this.permisoService.findAll();
   }
 
+  @Post()
+  create(@Body() createPermisoDto: Partial<Permiso>) {
+    return this.permisoService.create(createPermisoDto);
+  }
+
+
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.permisoService.findOne(+id);
+    return this.permisoService.findOneById(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePermisoDto: UpdatePermisoDto) {
+  update(@Param('id') id: string, @Body() updatePermisoDto: Partial<Permiso>) {
     return this.permisoService.update(+id, updatePermisoDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.permisoService.remove(+id);
+    return this.permisoService.delete(+id);
   }
 }
