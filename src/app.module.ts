@@ -14,6 +14,9 @@ import { CategoriaGastoModule } from './categoria-gasto/categoria-gasto.module';
 import { UsersModule } from './users/users.module';
 import { RolModule } from './rol/rol.module';
 import { PermisoModule } from './permiso/permiso.module';
+import { BancoModule } from './banco/banco.module';
+import { TipoTarjetaModule } from './tipo-tarjeta/tipo-tarjeta.module';
+import { ProveedorTarjetaModule } from './proveedor-tarjeta/proveedor-tarjeta.module';
 
 @Module({
   imports: [
@@ -57,6 +60,12 @@ import { PermisoModule } from './permiso/permiso.module';
     RolModule,
 
     PermisoModule,
+
+    BancoModule,
+
+    TipoTarjetaModule,
+
+    ProveedorTarjetaModule,
   ],
 })
 export class AppModule {

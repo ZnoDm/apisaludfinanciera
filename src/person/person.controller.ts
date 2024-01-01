@@ -74,7 +74,7 @@ export class PersonController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.personService.remove(+id);
+  delete(@Param('id') id: string) {
+    return this.personService.delete(+id);
   } */
 }

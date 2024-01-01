@@ -33,7 +33,7 @@ export class PermisoController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  delete(@Param('id') id: string) {
     return this.permisoService.delete(+id);
   }
 }
