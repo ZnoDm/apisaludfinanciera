@@ -12,7 +12,7 @@ import { ProveedorTarjeta } from 'src/proveedor-tarjeta/entities/proveedor-tarje
   providers: [TipoTarjetaService],
   imports: [
     
-    TypeOrmModule.forFeature([ Banco,ProveedorTarjeta,TipoTarjeta]),
+    TypeOrmModule.forFeature([ TipoTarjeta,Banco,ProveedorTarjeta]),
 
     PassportModule.register({ defaultStrategy: 'jwt' }),
     

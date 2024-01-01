@@ -17,6 +17,8 @@ import { PermisoModule } from './permiso/permiso.module';
 import { BancoModule } from './banco/banco.module';
 import { TipoTarjetaModule } from './tipo-tarjeta/tipo-tarjeta.module';
 import { ProveedorTarjetaModule } from './proveedor-tarjeta/proveedor-tarjeta.module';
+import { TipoCierreModule } from './tipo-cierre/tipo-cierre.module';
+import { CronogramaTarjetaModule } from './cronograma-tarjeta/cronograma-tarjeta.module';
 
 @Module({
   imports: [
@@ -37,8 +39,8 @@ import { ProveedorTarjetaModule } from './proveedor-tarjeta/proveedor-tarjeta.mo
           cryptoCredentialsDetails: {
               minVersion: 'TLSv1'
           }
-        }
-        /* "logging": true, */
+        },
+        // "logging": true,
       }
     ),
     AuthModule,
@@ -66,6 +68,10 @@ import { ProveedorTarjetaModule } from './proveedor-tarjeta/proveedor-tarjeta.mo
     TipoTarjetaModule,
 
     ProveedorTarjetaModule,
+
+    TipoCierreModule,
+
+    CronogramaTarjetaModule,
   ],
 })
 export class AppModule {

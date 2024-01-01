@@ -24,44 +24,44 @@ export class RolService {
     return role;
   }
 
-  async getAllPermissionsForRole(roleId: number): Promise<any> {
+  async getAllPermisosForRole(roleId: number): Promise<any> {
     const role = await this.roleRepository.findOne({ where: {id: roleId}, relations: ['permisos'] });
 
     if (!role) {
       throw new NotFoundException(`Role with ID ${roleId} not found`);
     }
 
-    const allPermissions = await this.permisoRepository.find();
+    const allPermisos = await this.permisoRepository.find();
 
-    const permissions = allPermissions.map((permiso) => {
+    const permisos = allPermisos.map((permiso) => {
       const isActive = role.permisos.some((p) => p.id === permiso.id);
       return {
         ...permiso,
         active: isActive,
       };
     });
-    return permissions;
+    return permisos;
   }
 
-  async togglePermissionForRole(roleId: number, permissionId: number, isActive: boolean): Promise<Role> {
+  async togglePermisoForRole(roleId: number, permisoId: number, isActive: boolean): Promise<Role> {
     const role = await this.roleRepository.findOne({ where: { id : roleId },  relations: ['permisos'] });
-    const permission = await this.permisoRepository.findOne( { where : { id: permissionId} });
+    const permiso = await this.permisoRepository.findOne( { where : { id: permisoId} });
 
     if (!role) {
       throw new NotFoundException(`Role with ID ${roleId} not found`);
     }
 
-    if (!permission) {
-      throw new NotFoundException(`Permission with ID ${permissionId} not found`);
+    if (!permiso) {
+      throw new NotFoundException(`Permiso with ID ${permisoId} not found`);
     }
 
-    const existingPermissionIndex = role.permisos.findIndex((p) => p.id == permissionId);
-    if (isActive && existingPermissionIndex === -1) {
-      role.permisos.push(permission);
-    } else if (!isActive && existingPermissionIndex !== -1) {
+    const existingPermisoIndex = role.permisos.findIndex((p) => p.id == permisoId);
+    if (isActive && existingPermisoIndex === -1) {
+      role.permisos.push(permiso);
+    } else if (!isActive && existingPermisoIndex !== -1) {
       console.log(isActive )
-      console.log( existingPermissionIndex)
-      role.permisos.splice(existingPermissionIndex, 1);
+      console.log( existingPermisoIndex)
+      role.permisos.splice(existingPermisoIndex, 1);
     }
 
     await this.roleRepository.save(role);

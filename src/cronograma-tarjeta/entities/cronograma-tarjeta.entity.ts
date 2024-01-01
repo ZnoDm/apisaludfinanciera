@@ -1,34 +1,45 @@
 import { Banco } from "src/banco/entities/banco.entity";
 import { ProveedorTarjeta } from "src/proveedor-tarjeta/entities/proveedor-tarjeta.entity";
+import { TipoCierre } from "src/tipo-cierre/entities/tipo-cierre.entity";
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToOne, JoinColumn, BeforeInsert, BeforeUpdate, ManyToOne, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
-@Entity('tipo_tarjeta')
-export class TipoTarjeta {
+@Entity('cronograma_tarjeta')
+export class CronogramaTarjeta {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column('varchar', { length: 200, nullable: false })
-    nombre: string;
+    periodo: string;
 
-    
-    @ManyToOne(() => Banco, (banco) => banco.tipoTarjetas)
+    @ManyToOne(() => Banco, (banco) => banco.cronogramaTarjetas)
     @JoinColumn({ name: 'banco_id' })
     banco: Banco;
   
-    @ManyToOne(() => ProveedorTarjeta, (proveedorTarjeta) => proveedorTarjeta.tipoTarjetas)
-    @JoinColumn({ name: 'proveedorTarjeta_id' })
-    proveedorTarjeta: ProveedorTarjeta;
+    @ManyToOne(() => TipoCierre, (tipoCierre) => tipoCierre.cronogramaTarjetas)
+    @JoinColumn({ name: 'tipoCierre_id' })
+    tipoCierre: TipoCierre;
 
-    @Column('varchar', { length: 1000, nullable: true  })
-    urlImagen: string;
-  
+
+    anio: number;
+
+    @Column()
+    mes: number;
+
+    
     @BeforeInsert()
     checkFieldsBeforeInsert() {
-        this.nombre = this.nombre.toLowerCase().trim();
+        this.periodo = this.periodo.toLowerCase().trim();
     }
 
     @BeforeUpdate()
     checkFieldsBeforeUpdate() {
         this.checkFieldsBeforeInsert();   
     }
+
+    @CreateDateColumn()
+    fechaFacturacion: Date;
+
+    @UpdateDateColumn()
+    fechaPago: Date;
+
 }

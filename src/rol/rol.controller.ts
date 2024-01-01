@@ -22,10 +22,10 @@ export class RolController {
     return this.rolService.create(createRolDto);
   }
 
-  @Get(':id/permissions')
+  @Get(':id/permisos')
   @Auth()
-  async getAllPermissionsForRoleWithFlag(@Param('id') id: number): Promise<any> {
-    return await this.rolService.getAllPermissionsForRole(+id);
+  async getAllPermisosForRoleWithFlag(@Param('id') id: number): Promise<any> {
+    return await this.rolService.getAllPermisosForRole(+id);
   }
 
 
@@ -44,13 +44,13 @@ export class RolController {
     return this.rolService.delete(+id);
   }
 
-  @Put(':roleId/permissions/:permissionId')
-  async togglePermissionForRole(
+  @Put(':roleId/permisos/:permisoId')
+  async togglePermisoForRole(
     @Param('roleId') roleId: number,
-    @Param('permissionId') permissionId: number,
+    @Param('permisoId') permisoId: number,
     @Body('isActive') isActive: boolean,
   ): Promise<any> {
-    return this.rolService.togglePermissionForRole(roleId, permissionId, isActive);
+    return this.rolService.togglePermisoForRole(roleId, permisoId, isActive);
   }
 
 }

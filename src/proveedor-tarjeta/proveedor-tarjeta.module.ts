@@ -5,13 +5,14 @@ import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Banco } from 'src/banco/entities/banco.entity';
 import { ProveedorTarjeta } from './entities/proveedor-tarjeta.entity';
+import { TipoTarjeta } from 'src/tipo-tarjeta/entities/tipo-tarjeta.entity';
 
 @Module({
   controllers: [ProveedorTarjetaController],
   providers: [ProveedorTarjetaService],
   imports: [
     
-    TypeOrmModule.forFeature([ Banco,ProveedorTarjeta]),
+    TypeOrmModule.forFeature([ ProveedorTarjeta,TipoTarjeta]),
 
     PassportModule.register({ defaultStrategy: 'jwt' }),
     

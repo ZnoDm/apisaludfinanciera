@@ -12,6 +12,7 @@ import { Person } from '../person/entities/person.entity';
 import { Role } from '../rol/entities/rol.entity';
 import { ValidRoles } from './enums/valid-roles';
 import { UserDto } from './dto/user.dto';
+import { Permiso } from 'src/permiso/entities/permiso.entity';
 
 
 @Injectable()
@@ -120,6 +121,34 @@ export class AuthService {
 
   }
 
+  async getPermisosByUser(user: User): Promise<Permiso[]> {
+    const usuario = await this.userRepository.findOne({ where : { id: user.id }, relations: ['roles'] });
+
+    if (!usuario) {
+      throw new NotFoundException(`Usuario with ID ${user.id} not found`);
+    }
+    console.log(usuario);
+
+    if (!usuario.roles || usuario.roles.length === 0) {
+      throw new NotFoundException(`Usuario with ID ${user.id} has no roles assigned`);
+    }
+
+
+    const permisosAsignados: Permiso[] = [];
+
+    usuario.roles.forEach((rol) => {
+      if (rol.permisos && rol.permisos.length > 0) {
+        rol.permisos.forEach((permiso) => {
+          permisosAsignados.push(permiso);
+        });
+      }
+    });
+    
+    return permisosAsignados;
+  }
+
+
+
   private getJwtToken( payload: JwtPayload ) {
 
     const token = this.jwtService.sign( payload );
@@ -135,5 +164,7 @@ export class AuthService {
     throw new InternalServerErrorException(error.message || 'Ocurrió un error interno en el servidor');
 
   }
+
+
 
 }

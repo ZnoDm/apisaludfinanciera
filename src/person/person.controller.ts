@@ -13,12 +13,13 @@ export class PersonController {
     private readonly personService: PersonService
   ) {}
 
-
+  //BEGIN - INFORMACION SENSIBLE DE LA PERSONA QUE REQUIERE AUTORIZACION DE USUARIO
   @Get('')
   @Auth()
   findOne( @GetUser() user: User) {
     return this.personService.findOne(user);
   }
+ 
    
   @Patch('update')
   @Auth()
@@ -50,8 +51,9 @@ export class PersonController {
   } 
 
 
-  
+  //END- INFORMACION SENSIBLE DE LA PERSONA QUE REQUIERE AUTORIZACION DE USUARIO
 
+  //BEGIN - CRUDS
 
 /*   @Post()
   create(@Body() createPersonDto: CreatePersonDto) {

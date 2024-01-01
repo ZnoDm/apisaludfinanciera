@@ -28,7 +28,7 @@ export class TipoTarjetaController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tipoTarjetaService.remove(+id);
+  delete(@Param('id') id: string) {
+    return this.tipoTarjetaService.delete(+id);
   }
 }

@@ -1,28 +1,23 @@
-
+import { Banco } from "src/banco/entities/banco.entity";
 import { CronogramaTarjeta } from "src/cronograma-tarjeta/entities/cronograma-tarjeta.entity";
-import { TipoCierre } from "src/tipo-cierre/entities/tipo-cierre.entity";
-import { TipoTarjeta } from "src/tipo-tarjeta/entities/tipo-tarjeta.entity";
+import { ProveedorTarjeta } from "src/proveedor-tarjeta/entities/proveedor-tarjeta.entity";
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToOne, JoinColumn, BeforeInsert, BeforeUpdate, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 
-@Entity('banco')
-export class Banco {
-
+@Entity('tipo_cierre')
+export class TipoCierre {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column('varchar', { length: 200, nullable: false })
     nombre: string;
 
-    @OneToMany(() => TipoTarjeta, (tipoTarejeta) => tipoTarejeta.banco)
-    tipoTarjetas: TipoTarjeta[];
+    
+    @ManyToOne(() => Banco, (banco) => banco.tipoCierres)
+    @JoinColumn({ name: 'banco_id' })
+    banco: Banco;
 
-    @OneToMany(() => TipoCierre, (tipoCierre) => tipoCierre.banco)
-    tipoCierres: TipoCierre[];
-
-
-    @OneToMany(() => CronogramaTarjeta, (cronogramaTarjeta) => cronogramaTarjeta.banco)
+    @OneToMany(() => CronogramaTarjeta, (cronogramaTarjeta) => cronogramaTarjeta.tipoCierre)
     cronogramaTarjetas: CronogramaTarjeta[];
-
 
     @BeforeInsert()
     checkFieldsBeforeInsert() {
@@ -33,5 +28,4 @@ export class Banco {
     checkFieldsBeforeUpdate() {
         this.checkFieldsBeforeInsert();   
     }
-
 }

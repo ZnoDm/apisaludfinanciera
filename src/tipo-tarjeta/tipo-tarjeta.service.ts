@@ -20,7 +20,7 @@ export class TipoTarjetaService {
     return `This action updates a #${id} tipoTarjeta`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} tipoTarjeta`;
+  delete(id: number) {
+    return `This action deletes a #${id} tipoTarjeta`;
   }
 }
