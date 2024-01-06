@@ -43,7 +43,7 @@ export class RolService {
     return permisos;
   }
 
-  async togglePermisoForRole(roleId: number, permisoId: number, isActive: boolean): Promise<Role> {
+  async togglePermisoForRole(roleId: number, permisoId: number, isActive: boolean): Promise<any> {
     const role = await this.roleRepository.findOne({ where: { id : roleId },  relations: ['permisos'] });
     const permiso = await this.permisoRepository.findOne( { where : { id: permisoId} });
 
@@ -65,23 +65,44 @@ export class RolService {
     }
 
     await this.roleRepository.save(role);
-    return role;
+    return {
+      ok: true,
+      role
+    }
   }
 
-  async create(roleData: Partial<Role>): Promise<Role> {
+  async create(roleData: Partial<Role>): Promise<any> {
     const newRole: Role = await this.roleRepository.create(roleData);
     const savedRole: Role = await this.roleRepository.save(newRole);
-    return savedRole;
+    return {
+      ok: true,
+      message : `Creado con éxito`,
+      rol: savedRole
+    };
   }
 
-  async update(id: number, roleData: Partial<Role>): Promise<Role | undefined> {
+  async update(id: number, roleData: Partial<Role>): Promise<any> {
     await this.roleRepository.update(id, roleData);
     const updatedRole: Role | undefined = await this.roleRepository.findOne({where: {id}});
-    return updatedRole;
+    return {
+      ok: true,
+      message : `Actualizado con éxito`,
+      rol: updatedRole
+    };
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: number): Promise<any> {
     const deleteResult = await this.roleRepository.delete(id);
-    return deleteResult.affected !== 0;
+    if(deleteResult.affected !== 0){
+      return {
+        ok: true,
+        message : `El id: ${id} fue eliminado con éxito`
+      }
+    }else{
+      return {
+        ok: false,
+        message : `No hubo coicidencias`
+      }
+    }
   }
 }

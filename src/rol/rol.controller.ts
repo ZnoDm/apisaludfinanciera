@@ -22,13 +22,6 @@ export class RolController {
     return this.rolService.create(createRolDto);
   }
 
-  @Get(':id/permisos')
-  @Auth()
-  async getAllPermisosForRoleWithFlag(@Param('id') id: number): Promise<any> {
-    return await this.rolService.getAllPermisosForRole(+id);
-  }
-
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.rolService.findOneById(+id);
@@ -42,6 +35,12 @@ export class RolController {
   @Delete(':id')
   delete(@Param('id') id: string) {
     return this.rolService.delete(+id);
+  }
+
+  @Get(':id/permisos')
+  @Auth()
+  async getAllPermisosForRoleWithFlag(@Param('id') id: number): Promise<any> {
+    return await this.rolService.getAllPermisosForRole(+id);
   }
 
   @Put(':roleId/permisos/:permisoId')

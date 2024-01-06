@@ -21,20 +21,38 @@ export class PermisoService {
     return permiso;
   }
 
-  async create(permisoData: Partial<Permiso>): Promise<Permiso> {
+  async create(permisoData: Partial<Permiso>): Promise<any> {
     const newPermiso: Permiso = await this.permisoRepository.create(permisoData);
     const savedPermiso: Permiso = await this.permisoRepository.save(newPermiso);
-    return savedPermiso;
+    return {
+      ok: true,
+      message : `Creado con éxito`,
+      rol: savedPermiso
+    };
   }
 
-  async update(id: number, permisoData: Partial<Permiso>): Promise<Permiso | undefined> {
+  async update(id: number, permisoData: Partial<Permiso>): Promise<any> {
     await this.permisoRepository.update(id, permisoData);
     const updatedPermiso: Permiso | undefined = await this.permisoRepository.findOne({where: {id}});
-    return updatedPermiso;
+    return {
+      ok: true,
+      message : `Actualizado con éxito`,
+      rol: updatedPermiso
+    };
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: number): Promise<any> {
     const deleteResult = await this.permisoRepository.delete(id);
-    return deleteResult.affected !== 0;
+    if(deleteResult.affected !== 0){
+      return {
+        ok: true,
+        message : `El id: ${id} fue eliminado con éxito`
+      }
+    }else{
+      return {
+        ok: false,
+        message : `No hubo coicidencias`
+      }
+    }
   }
 }

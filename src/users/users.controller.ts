@@ -24,7 +24,38 @@ export class UsersController {
     return this.usersService.findOneById(+id);
   }
 
-  // @Post()
+
+
+
+
+  @Put(':id/reset-password')
+  resetPassword(@Param('id') id: string) {
+    return this.usersService.resetPassword(+id);
+  }
+
+
+  @Put(':id/enabled-disabled')
+  enabledDisabledUser(@Param('id') id: number): Promise<any> {
+    return this.usersService.enabledDisabledUser(id);
+  }
+
+  @Get(':id/roles')
+  @Auth()
+  async getAllRolesForUserWithFlag(@Param('id') id: number): Promise<any> {
+    return await this.usersService.getAllRolesForUser(+id);
+  }
+
+  @Put(':userId/roles/:roleId')
+  async togglePermisoForRole(
+    @Param('userId') userId: number,
+    @Param('roleId') roleId: number,
+    @Body('isActive') isActive: boolean,
+  ): Promise<any> {
+    return this.usersService.toggleRoleForUser(userId, roleId, isActive);
+  }
+
+
+    // @Post()
   // create(@Body() createUserDto: CreateUserDto) {
   //   return this.usersService.create(createUserDto);
   // }
@@ -34,8 +65,4 @@ export class UsersController {
   //   return this.usersService.update(+id, updateUserDto);
   // }
 
-  @Put(':id/enabled-disabled')
-  enabledDisabledUser(@Param('id') id: number): Promise<any> {
-    return this.usersService.enabledDisabledUser(id);
-  }
 }

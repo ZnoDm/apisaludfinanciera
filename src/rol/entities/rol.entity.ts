@@ -9,8 +9,11 @@ export class Role {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column('varchar', { length: 200 })
   nombre: string;
+
+  @Column('varchar', { length: 200 , nullable: true })
+  descripcion: string;
 
   @ManyToMany(() => User, user => user.roles)
   users: User[];

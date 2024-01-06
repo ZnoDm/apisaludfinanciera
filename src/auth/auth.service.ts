@@ -122,7 +122,7 @@ export class AuthService {
   }
 
   async getPermisosByUser(user: User): Promise<Permiso[]> {
-    const usuario = await this.userRepository.findOne({ where : { id: user.id }, relations: ['roles'] });
+    const usuario = await this.userRepository.findOne({ where : { id: user.id }, relations: ['roles','roles.permisos'] });
 
     if (!usuario) {
       throw new NotFoundException(`Usuario with ID ${user.id} not found`);

@@ -41,17 +41,17 @@ export class AuthController {
 
 
   //UNA VEZ LOGEADO TODAS LAS RUTAS DEBES SER COMO ESTA
-  @Get('private3')
-  @Auth( ValidRoles.admin )
-  privateRoute3(
-    @GetUser() user: User
-  ) {
+  // @Get('private3')
+  // @Auth( ValidRoles.admin )
+  // privateRoute3(
+  //   @GetUser() user: User
+  // ) {
 
-    return {
-      ok: true,
-      user
-    }
-  }
+  //   return {
+  //     ok: true,
+  //     user
+  //   }
+  // }
 
 
 
