@@ -143,10 +143,33 @@ export class AuthService {
         });
       }
     });
-    
-    return permisosAsignados;
+    const permisosOrganizados = this.organizarPermisosEnArbol(permisosAsignados);
+    return permisosOrganizados;
   }
 
+  organizarPermisosEnArbol(permisos: Permiso[]): any [] {
+    const permisosConHijos: { [key: number]: any } = {};
+  
+    // Primero, construye un objeto con todos los permisos y sus hijos vacíos
+    permisos.forEach((permiso) => {
+      permisosConHijos[permiso.id] = {
+        ...permiso,
+        subNavegacion: []
+      };
+    });
+  
+    // Luego, agrupa los permisos bajo sus permisos padres
+    const permisosArbol: any [] = [];
+    permisos.forEach((permiso) => {
+      if (permiso.idPermisoPadre !== null && permisosConHijos[permiso.idPermisoPadre]) {
+        permisosConHijos[permiso.idPermisoPadre].subNavegacion.push(permisosConHijos[permiso.id]);
+      } else {
+        permisosArbol.push(permisosConHijos[permiso.id]);
+      }
+    });
+  
+    return permisosArbol;
+  }
 
 
   private getJwtToken( payload: JwtPayload ) {

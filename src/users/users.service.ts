@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,6 +11,7 @@ import { UserDto } from './dto/users.dto';
 
 import * as bcrypt from 'bcrypt-nodejs';
 import { Role } from 'src/rol/entities/rol.entity';
+import { Person } from 'src/person/entities/person.entity';
 @Injectable()
 export class UsersService {
 
@@ -19,25 +20,52 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
+    @InjectRepository(Person)
+    private readonly personRepository: Repository<Person>,
     private userMapper: UserMapper,
   ){}
-  
-  async resetPassword(userId: number) {
-    const userPerson = await this.userRepository.findOne({ 
-      where: { id : userId },
+ 
+
+  async findAll(): Promise<UserDto[]> {
+    const users: User[] = await this.userRepository.find({
+      relations : ['person']
+    });
+    return users.map( user => this.userMapper.entityToDTO(user));
+  }
+
+  async findOneById(id: number): Promise<User | undefined> {
+    const user: User | undefined = await this.userRepository.findOne({where: {id}});
+    return user;
+  }
+
+
+
+
+
+
+
+
+   
+  async resetPassword(id: number) {
+    const user = await this.userRepository.findOne({ 
+      where: { id },
       select: { email: true, password: true, id: true}
     });
 
-    userPerson.password = bcrypt.hashSync('123456');
-    await this.userRepository.save( userPerson )
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
+    user.password = bcrypt.hashSync('123456');
+    await this.userRepository.save( user )
 
     return{
       ok:true,
       message:  "Contraseña actualizada con éxito."
     }
   }
-
-  async enabledDisabledUser(id: number): Promise<User | undefined> {
+  
+  async enabledDisabledUser(id: number): Promise<any> {
     const user = await this.userRepository.findOne({ where :{id}});
 
     if (!user) {
@@ -46,9 +74,11 @@ export class UsersService {
 
     user.isActive = !user.isActive;
     await this.userRepository.save(user);
-    return user;
+    return {
+      ok : true,
+      user
+    };
   }
-
 
   async getAllRolesForUser(id: number): Promise<any> {
     const user = await this.userRepository.findOne({ where: {id}, relations: ['roles'] });
@@ -91,28 +121,69 @@ export class UsersService {
       console.log( existingRolIndex)
       user.roles.splice(existingRolIndex, 1);
     }
-    
+
     await this.userRepository.save(user);
     return {
       ok: true,
+      message: "Rol actualizado con éxito",
       user
     }
   }
 
-  // create(createUserDto: CreateUserDto) {
-  //   return 'This action adds a new user';
-  // }
+  async create(createUserDto: CreateUserDto) {
+    const RolUser = await this.roleRepository.findOne({ where: { id:createUserDto.idRol}});
+    if (!RolUser) {
+      throw new BadRequestException('No se encontró el rol user para asignar');
+    }
+    const PersonUser = await this.personRepository.findOne({ where: { id:createUserDto.idPerson}});
+    if (!PersonUser) {
+      throw new BadRequestException('No se encontró la persona para asignar');
+    }
 
-  async findAll(): Promise<UserDto[]> {
-    const users: User[] = await this.userRepository.find({
-      relations : ['person']
+    const user = this.userRepository.create({
+      email: createUserDto.email,
+      password: bcrypt.hashSync(createUserDto.password),
+      person: PersonUser,
+      roles: [ RolUser ]
     });
-    return users.map( user => this.userMapper.entityToDTO(user));
-  }
+    await this.userRepository.save( user );
 
-  async findOneById(id: number): Promise<User | undefined> {
-    const user: User | undefined = await this.userRepository.findOne({where: {id}});
-    return user;
+    return {
+      ok: true,
+      message : `Creado con éxito`,
+      user: user
+    };
   }
+async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.userRepository.findOne({ where : {id}});
+    
+    if (!user) {
+        throw new NotFoundException('Usuario no encontrado');
+    }
+    
+    if (updateUserDto.email) {
+        user.email = updateUserDto.email;
+    }
+    
+    if (updateUserDto.password) {
+        user.password = bcrypt.hashSync(updateUserDto.password);
+    }
+
+    if (updateUserDto.idPerson) {
+        const PersonUser = await this.personRepository.findOne({ where: { id: updateUserDto.idPerson } });
+        if (!PersonUser) {
+            throw new BadRequestException('No se encontró la persona para asignar');
+        }
+        user.person = PersonUser;
+    }
+    
+    await this.userRepository.save(user);
+    
+    return {
+        ok: true,
+        message: 'Usuario actualizado con éxito',
+        user: user,
+    };
+}
 
 }

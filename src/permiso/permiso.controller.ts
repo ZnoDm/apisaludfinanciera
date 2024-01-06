@@ -16,15 +16,14 @@ export class PermisoController {
     return this.permisoService.findAll();
   }
 
-  @Post()
-  create(@Body() createPermisoDto: Partial<Permiso>) {
-    return this.permisoService.create(createPermisoDto);
-  }
-
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.permisoService.findOneById(+id);
+  }
+
+  @Post()
+  create(@Body() createPermisoDto: Partial<Permiso>) {
+    return this.permisoService.create(createPermisoDto);
   }
 
   @Patch(':id')

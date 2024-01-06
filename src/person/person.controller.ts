@@ -16,8 +16,8 @@ export class PersonController {
   //BEGIN - INFORMACION SENSIBLE DE LA PERSONA QUE REQUIERE AUTORIZACION DE USUARIO
   @Get('')
   @Auth()
-  findOne( @GetUser() user: User) {
-    return this.personService.findOne(user);
+  getDatosPersonales( @GetUser() user: User) {
+    return this.personService.getDatosPersonales(user);
   }
  
    
@@ -27,7 +27,7 @@ export class PersonController {
     @GetUser() user: User,
     @Body() updatePersonDto: UpdatePersonDto
   ) {
-    return this.personService.update(user,updatePersonDto);
+    return this.personService.updateDatosPersonales(user,updatePersonDto);
   }
 
  
@@ -55,15 +55,21 @@ export class PersonController {
 
   //BEGIN - CRUDS
 
-/*   @Post()
+  @Get()
+  @Auth()
+  comboFindAll() {
+    return this.personService.comboFindAll();
+  }
+
+/*   
+
+
+  @Post()
   create(@Body() createPersonDto: CreatePersonDto) {
     return this.personService.create(createPersonDto);
   }
 
-  @Get()
-  findAll() {
-    return this.personService.findAll();
-  }
+  
 
   @Get(':id')
   findOne(@Param('id') id: string) {

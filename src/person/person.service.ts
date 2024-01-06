@@ -21,7 +21,7 @@ export class PersonService {
   ){}
 
 
-  async findOne(user : User) {
+  async getDatosPersonales(user : User) {
     if (!user.person) {
       throw new NotFoundException(`Person with idUsuario ${user.id} not found.`);
     }
@@ -31,7 +31,7 @@ export class PersonService {
     };
   }
 
-  async update(user:User, updatePersonDto: UpdatePersonDto) {
+  async updateDatosPersonales(user:User, updatePersonDto: UpdatePersonDto) {
     /* const person = await this.findOne(user); */
     user.person.nombres                 = updatePersonDto.nombres;
     user.person.apellidos               = updatePersonDto.apellidos;
@@ -86,14 +86,20 @@ export class PersonService {
     }
   }
 
+
+  async comboFindAll() {
+    const persons: Person[] = await this.personRepository.find(
+      {select: { id: true, nombres: true, apellidos: true}}
+    );
+    return persons;
+  }
+
   
 /*   create(createPersonDto: CreatePersonDto) {
     return 'This action adds a new person';
   }
 
-  findAll() {
-    return `This action returns all person`;
-  } */
+  */
 
 /*   remove(id: number) {
     return `This action removes a #${id} person`;

@@ -12,21 +12,47 @@ export class BancoService {
     private readonly bancoRepository: Repository<Banco>,
   ) {}
 
-  async create(createBancoDto: CreateBancoDto): Promise<Banco> {
-    const banco = this.bancoRepository.create(createBancoDto);
-    return await this.bancoRepository.save(banco);
+  async findAll() : Promise<Banco[]> {
+    const bancos: Banco[] = await this.bancoRepository.find();
+    return bancos;
+  }
+  async findOneById(id: number): Promise<Banco | undefined> {
+    const banco: Banco | undefined = await this.bancoRepository.findOne({where: {id}});
+    return banco;
   }
 
-  async findAll(): Promise<Banco[]> {
-    return await this.bancoRepository.find();
+  async create(bancoData: Partial<Banco>): Promise<any> {
+    const newBanco: Banco = await this.bancoRepository.create(bancoData);
+    const savedBanco: Banco = await this.bancoRepository.save(newBanco);
+    return {
+      ok: true,
+      message : `Creado con éxito`,
+      rol: savedBanco
+    };
   }
 
-  async findOne(id: number): Promise<Banco | undefined> {
-    return await this.bancoRepository.findOne({ where : { id } });
+  async update(id: number, bancoData: Partial<Banco>): Promise<any> {
+    await this.bancoRepository.update(id, bancoData);
+    const updatedBanco: Banco | undefined = await this.bancoRepository.findOne({where: {id}});
+    return {
+      ok: true,
+      message : `Actualizado con éxito`,
+      rol: updatedBanco
+    };
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: number): Promise<any> {
     const deleteResult = await this.bancoRepository.delete(id);
-    return deleteResult.affected !== 0;
+    if(deleteResult.affected !== 0){
+      return {
+        ok: true,
+        message : `El id: ${id} fue eliminado con éxito`
+      }
+    }else{
+      return {
+        ok: false,
+        message : `No hubo coicidencias`
+      }
+    }
   }
 }

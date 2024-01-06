@@ -11,8 +11,7 @@ export class UsersController {
     private readonly usersService: UsersService
   ) {}
 
-
-
+ 
   @Get('')
   @Auth()
   findAll() {
@@ -24,6 +23,10 @@ export class UsersController {
     return this.usersService.findOneById(+id);
   }
 
+
+
+
+  
 
 
 
@@ -55,14 +58,20 @@ export class UsersController {
   }
 
 
-    // @Post()
-  // create(@Body() createUserDto: CreateUserDto) {
-  //   return this.usersService.create(createUserDto);
-  // }
+  @Post()
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
+  }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.usersService.update(+id, updateUserDto);
-  // }
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(+id, updateUserDto);
+  }
+
+ 
+
+
+
+
 
 }

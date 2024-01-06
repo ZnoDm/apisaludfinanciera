@@ -9,7 +9,8 @@ import { Role } from './entities/rol.entity';
 export class RolController {
   constructor(private readonly rolService: RolService) {}
 
-  
+
+
   @Get('')
   @Auth()
   findAll() {
@@ -37,6 +38,10 @@ export class RolController {
     return this.rolService.delete(+id);
   }
 
+  
+
+
+
   @Get(':id/permisos')
   @Auth()
   async getAllPermisosForRoleWithFlag(@Param('id') id: number): Promise<any> {
@@ -51,5 +56,6 @@ export class RolController {
   ): Promise<any> {
     return this.rolService.togglePermisoForRole(roleId, permisoId, isActive);
   }
+
 
 }
