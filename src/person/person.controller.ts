@@ -55,10 +55,10 @@ export class PersonController {
 
   //BEGIN - CRUDS
 
-  @Get()
+  @Get('listar')
   @Auth()
-  comboFindAll() {
-    return this.personService.comboFindAll();
+  getListar() {
+    return this.personService.getListar();
   }
 
 /*   

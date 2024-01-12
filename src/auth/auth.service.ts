@@ -135,14 +135,19 @@ export class AuthService {
 
 
     const permisosAsignados: Permiso[] = [];
+    const permisosIds: number[] = []; // Array auxiliar para almacenar IDs de permisos
 
     usuario.roles.forEach((rol) => {
       if (rol.permisos && rol.permisos.length > 0) {
         rol.permisos.forEach((permiso) => {
-          permisosAsignados.push(permiso);
+          if (!permisosIds.includes(permiso.id)) { // Verificar si el permiso ya está en la lista
+            permisosIds.push(permiso.id); // Agregar el ID del permiso al array auxiliar
+            permisosAsignados.push(permiso); // Agregar el permiso a la lista
+          }
         });
       }
     });
+
     const permisosOrganizados = this.organizarPermisosEnArbol(permisosAsignados);
     return permisosOrganizados;
   }

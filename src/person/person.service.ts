@@ -87,7 +87,7 @@ export class PersonService {
   }
 
 
-  async comboFindAll() {
+  async getListar() {
     const persons: Person[] = await this.personRepository.find(
       {select: { id: true, nombres: true, apellidos: true}}
     );

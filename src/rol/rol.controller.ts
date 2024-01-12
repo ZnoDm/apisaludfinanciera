@@ -16,6 +16,13 @@ export class RolController {
   findAll() {
     return this.rolService.findAll();
   }
+ 
+  @Get('listar')
+  @Auth()
+  getListar() {
+    return this.rolService.getListar();
+  }
+
 
   @Post()
   @Auth()

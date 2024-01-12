@@ -16,6 +16,12 @@ export class RolService {
   ){}
 
 
+  
+  async getListar() {
+    const roles: Role[] = await this.roleRepository.find();
+    return roles;
+  }
+
 
 
   async findAll() : Promise<Role[]> {
@@ -62,8 +68,6 @@ export class RolService {
     }
   }
 
-
-  
 
 
 

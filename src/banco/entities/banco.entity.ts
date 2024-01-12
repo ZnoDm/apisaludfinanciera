@@ -24,14 +24,14 @@ export class Banco {
     cronogramaTarjetas: CronogramaTarjeta[];
 
 
-    @BeforeInsert()
-    checkFieldsBeforeInsert() {
-        this.nombre = this.nombre.toLowerCase().trim();
-    }
+    // @BeforeInsert()
+    // checkFieldsBeforeInsert() {
+    //     this.nombre = this.nombre.toLowerCase().trim();
+    // }
 
-    @BeforeUpdate()
-    checkFieldsBeforeUpdate() {
-        this.checkFieldsBeforeInsert();   
-    }
+    // @BeforeUpdate()
+    // checkFieldsBeforeUpdate() {
+    //     this.checkFieldsBeforeInsert();   
+    // }
 
 }

@@ -14,14 +14,14 @@ export class ProveedorTarjeta {
     @OneToMany(() => TipoTarjeta, (tipoTarejeta) => tipoTarejeta.proveedorTarjeta)
     tipoTarjetas: TipoTarjeta[];
 
-    @BeforeInsert()
-    checkFieldsBeforeInsert() {
-        this.nombre = this.nombre.toLowerCase().trim();
-    }
+    // @BeforeInsert()
+    // checkFieldsBeforeInsert() {
+    //     this.nombre = this.nombre.toLowerCase().trim();
+    // }
 
-    @BeforeUpdate()
-    checkFieldsBeforeUpdate() {
-        this.checkFieldsBeforeInsert();   
-    }
+    // @BeforeUpdate()
+    // checkFieldsBeforeUpdate() {
+    //     this.checkFieldsBeforeInsert();   
+    // }
 
 }
