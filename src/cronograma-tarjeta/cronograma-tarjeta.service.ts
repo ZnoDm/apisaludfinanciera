@@ -15,11 +15,11 @@ export class CronogramaTarjetaService {
   
 
   async findAll() : Promise<CronogramaTarjeta[]> {
-    const cronogramaTarjetas: CronogramaTarjeta[] = await this.cronogramaTarjetaRepository.find();
+    const cronogramaTarjetas: CronogramaTarjeta[] = await this.cronogramaTarjetaRepository.find({relations:['banco','tipoCierre']});
     return cronogramaTarjetas;
   }
   async findOneById(id: number): Promise<CronogramaTarjeta | undefined> {
-    const cronogramaTarjeta: CronogramaTarjeta | undefined = await this.cronogramaTarjetaRepository.findOne({where: {id}});
+    const cronogramaTarjeta: CronogramaTarjeta | undefined = await this.cronogramaTarjetaRepository.findOne({where: {id} ,relations:['banco']});
     return cronogramaTarjeta;
   }
 

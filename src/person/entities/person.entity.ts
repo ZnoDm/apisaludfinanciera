@@ -1,7 +1,7 @@
 import { Length } from 'class-validator';
 import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm'
 import { User } from '../../users/entities/user.entity';
-import { Cuenta } from 'src/cuenta/entities/cuenta.entity';
+// import { Cuenta } from 'src/cuenta/entities/cuenta.entity';
 
 @Entity('person') // Nombre de la tabla persona
 export class Person {
@@ -31,7 +31,7 @@ export class Person {
     user: User;
 
 
-    @OneToMany(() => Cuenta, (cuenta) => cuenta.person)
-    cuentas: Cuenta[];
+    // @OneToMany(() => Cuenta, (cuenta) => cuenta.person)
+    // cuentas: Cuenta[];
 
 }
