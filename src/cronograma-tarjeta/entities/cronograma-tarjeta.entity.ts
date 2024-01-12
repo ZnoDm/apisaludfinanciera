@@ -19,27 +19,16 @@ export class CronogramaTarjeta {
     @JoinColumn({ name: 'tipoCierre_id' })
     tipoCierre: TipoCierre;
 
-
+    @Column()
     anio: number;
 
     @Column()
     mes: number;
 
-    
-    @BeforeInsert()
-    checkFieldsBeforeInsert() {
-        this.periodo = this.periodo.toLowerCase().trim();
-    }
-
-    @BeforeUpdate()
-    checkFieldsBeforeUpdate() {
-        this.checkFieldsBeforeInsert();   
-    }
-
-    @CreateDateColumn()
+    @Column('date')
     fechaFacturacion: Date;
 
-    @UpdateDateColumn()
+    @Column('date')
     fechaPago: Date;
 
 }

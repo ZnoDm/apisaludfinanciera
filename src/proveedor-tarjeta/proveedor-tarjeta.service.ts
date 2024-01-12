@@ -12,21 +12,47 @@ export class ProveedorTarjetaService {
     private readonly proveedorTarjetaRepository: Repository<ProveedorTarjeta>,
   ) {}
 
-  async create(createProveedorTarjetaDto: CreateProveedorTarjetaDto): Promise<ProveedorTarjeta> {
-    const proveedorTarjeta = this.proveedorTarjetaRepository.create(createProveedorTarjetaDto);
-    return await this.proveedorTarjetaRepository.save(proveedorTarjeta);
+  async findAll() : Promise<ProveedorTarjeta[]> {
+    const proveedorTarjetas: ProveedorTarjeta[] = await this.proveedorTarjetaRepository.find();
+    return proveedorTarjetas;
+  }
+  async findOneById(id: number): Promise<ProveedorTarjeta | undefined> {
+    const proveedorTarjeta: ProveedorTarjeta | undefined = await this.proveedorTarjetaRepository.findOne({where: {id}});
+    return proveedorTarjeta;
   }
 
-  async findAll(): Promise<ProveedorTarjeta[]> {
-    return await this.proveedorTarjetaRepository.find();
+  async create(proveedorTarjetaData: Partial<ProveedorTarjeta>): Promise<any> {
+    const newProveedorTarjeta: ProveedorTarjeta = await this.proveedorTarjetaRepository.create(proveedorTarjetaData);
+    const savedProveedorTarjeta: ProveedorTarjeta = await this.proveedorTarjetaRepository.save(newProveedorTarjeta);
+    return {
+      ok: true,
+      message : `Creado con éxito`,
+      rol: savedProveedorTarjeta
+    };
   }
 
-  async findOne(id: number): Promise<ProveedorTarjeta | undefined> {
-    return await this.proveedorTarjetaRepository.findOne({where:{id}});
+  async update(id: number, proveedorTarjetaData: Partial<ProveedorTarjeta>): Promise<any> {
+    await this.proveedorTarjetaRepository.update(id, proveedorTarjetaData);
+    const updatedProveedorTarjeta: ProveedorTarjeta | undefined = await this.proveedorTarjetaRepository.findOne({where: {id}});
+    return {
+      ok: true,
+      message : `Actualizado con éxito`,
+      rol: updatedProveedorTarjeta
+    };
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: number): Promise<any> {
     const deleteResult = await this.proveedorTarjetaRepository.delete(id);
-    return deleteResult.affected !== 0;
+    if(deleteResult.affected !== 0){
+      return {
+        ok: true,
+        message : `El id: ${id} fue eliminado con éxito`
+      }
+    }else{
+      return {
+        ok: false,
+        message : `No hubo coicidencias`
+      }
+    }
   }
 }

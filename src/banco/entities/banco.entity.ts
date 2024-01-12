@@ -13,6 +13,9 @@ export class Banco {
     @Column('varchar', { length: 200, nullable: false })
     nombre: string;
 
+    @Column('varchar', { length: 50, nullable: true })
+    codigo: string;
+
     @OneToMany(() => TipoTarjeta, (tipoTarejeta) => tipoTarejeta.banco)
     tipoTarjetas: TipoTarjeta[];
 
