@@ -149,8 +149,14 @@ export class AuthService {
     });
 
     const permisosOrganizados = this.organizarPermisosEnArbol(permisosAsignados);
-    return permisosOrganizados;
+    return this.ordenarPorOrden(permisosOrganizados);
   }
+
+  private ordenarPorOrden(arreglo) {
+    arreglo.sort((a, b) => a.orden - b.orden);
+    return arreglo;
+  }
+
 
   organizarPermisosEnArbol(permisos: Permiso[]): any [] {
     const permisosConHijos: { [key: number]: any } = {};
