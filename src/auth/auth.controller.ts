@@ -32,18 +32,26 @@ export class AuthController {
     return this.authService.checkAuthStatus( user );
   }
 
-  //UNA VEZ LOGEADO TODAS LAS RUTAS DEBES SER COMO ESTA
-  @Get('private3')
-  @Auth( ValidRoles.admin )
-  privateRoute3(
-    @GetUser() user: User
-  ) {
-
-    return {
-      ok: true,
-      user
-    }
+  @Get('permisos')
+  @Auth()
+  findPermisos( @GetUser() user: User) {
+    return this.authService.getPermisosByUser(user);
   }
+
+
+
+  //UNA VEZ LOGEADO TODAS LAS RUTAS DEBES SER COMO ESTA
+  // @Get('private3')
+  // @Auth( ValidRoles.admin )
+  // privateRoute3(
+  //   @GetUser() user: User
+  // ) {
+
+  //   return {
+  //     ok: true,
+  //     user
+  //   }
+  // }
 
 
 

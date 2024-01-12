@@ -10,6 +10,7 @@ import { User } from '../users/entities/user.entity';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { Person } from '../person/entities/person.entity';
 import { Role } from '../rol/entities/rol.entity';
+import { Permiso } from 'src/permiso/entities/permiso.entity';
 
 @Module({
   controllers: [AuthController],
@@ -17,7 +18,7 @@ import { Role } from '../rol/entities/rol.entity';
   imports: [
     ConfigModule,
 
-    TypeOrmModule.forFeature([ User, Person, Role ]),
+    TypeOrmModule.forFeature([ User, Person, Role,Permiso ]),
 
     PassportModule.register({ defaultStrategy: 'jwt' }),
 

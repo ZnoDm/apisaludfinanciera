@@ -13,12 +13,13 @@ export class PersonController {
     private readonly personService: PersonService
   ) {}
 
-
+  //BEGIN - INFORMACION SENSIBLE DE LA PERSONA QUE REQUIERE AUTORIZACION DE USUARIO
   @Get('')
   @Auth()
-  findOne( @GetUser() user: User) {
-    return this.personService.findOne(user);
+  getDatosPersonales( @GetUser() user: User) {
+    return this.personService.getDatosPersonales(user);
   }
+ 
    
   @Patch('update')
   @Auth()
@@ -26,7 +27,7 @@ export class PersonController {
     @GetUser() user: User,
     @Body() updatePersonDto: UpdatePersonDto
   ) {
-    return this.personService.update(user,updatePersonDto);
+    return this.personService.updateDatosPersonales(user,updatePersonDto);
   }
 
  
@@ -50,18 +51,25 @@ export class PersonController {
   } 
 
 
-  
+  //END- INFORMACION SENSIBLE DE LA PERSONA QUE REQUIERE AUTORIZACION DE USUARIO
+
+  //BEGIN - CRUDS
+
+  @Get('listar')
+  @Auth()
+  getListar() {
+    return this.personService.getListar();
+  }
+
+/*   
 
 
-/*   @Post()
+  @Post()
   create(@Body() createPersonDto: CreatePersonDto) {
     return this.personService.create(createPersonDto);
   }
 
-  @Get()
-  findAll() {
-    return this.personService.findAll();
-  }
+  
 
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -74,7 +82,7 @@ export class PersonController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.personService.remove(+id);
+  delete(@Param('id') id: string) {
+    return this.personService.delete(+id);
   } */
 }

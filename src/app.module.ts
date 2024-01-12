@@ -6,14 +6,19 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { PersonModule } from './person/person.module';
-import { CuentaModule } from './cuenta/cuenta.module';
+// import { CuentaModule } from './cuenta/cuenta.module';
 import { TarjetaModule } from './tarjeta/tarjeta.module';
-import { TipoCuentaModule } from './tipo-cuenta/tipo-cuenta.module';
-import { TipoGastoModule } from './tipo-gasto/tipo-gasto.module';
+// import { TipoCuentaModule } from './tipo-cuenta/tipo-cuenta.module';
+// import { TipoGastoModule } from './tipo-gasto/tipo-gasto.module';
 import { CategoriaGastoModule } from './categoria-gasto/categoria-gasto.module';
 import { UsersModule } from './users/users.module';
 import { RolModule } from './rol/rol.module';
 import { PermisoModule } from './permiso/permiso.module';
+import { BancoModule } from './banco/banco.module';
+import { TipoTarjetaModule } from './tipo-tarjeta/tipo-tarjeta.module';
+import { ProveedorTarjetaModule } from './proveedor-tarjeta/proveedor-tarjeta.module';
+import { TipoCierreModule } from './tipo-cierre/tipo-cierre.module';
+import { CronogramaTarjetaModule } from './cronograma-tarjeta/cronograma-tarjeta.module';
 
 @Module({
   imports: [
@@ -34,21 +39,21 @@ import { PermisoModule } from './permiso/permiso.module';
           cryptoCredentialsDetails: {
               minVersion: 'TLSv1'
           }
-        }
-        /* "logging": true, */
+        },
+        // "logging": true,
       }
     ),
     AuthModule,
 
     PersonModule,
 
-    CuentaModule,
+    // CuentaModule,
 
     TarjetaModule,
 
-    TipoCuentaModule,
+    // TipoCuentaModule,
 
-    TipoGastoModule,
+    // TipoGastoModule,
 
     CategoriaGastoModule,
 
@@ -57,6 +62,16 @@ import { PermisoModule } from './permiso/permiso.module';
     RolModule,
 
     PermisoModule,
+
+    BancoModule,
+
+    TipoTarjetaModule,
+
+    ProveedorTarjetaModule,
+
+    TipoCierreModule,
+
+    CronogramaTarjetaModule,
   ],
 })
 export class AppModule {

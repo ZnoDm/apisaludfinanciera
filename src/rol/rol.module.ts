@@ -12,7 +12,7 @@ import { User } from 'src/users/entities/user.entity';
   providers: [RolService],
   imports: [
     
-    TypeOrmModule.forFeature([ Role,Permiso,User]),
+    TypeOrmModule.forFeature([ Role, Permiso, User]),
 
     PassportModule.register({ defaultStrategy: 'jwt' }),
     

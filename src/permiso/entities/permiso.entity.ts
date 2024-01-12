@@ -14,6 +14,12 @@ export class Permiso {
   @Column()
   url: string;
 
+  @Column('int', { nullable: true})
+  idPermisoPadre: number;
+
+  @Column('int', { default: 0 })
+  orden: number;
+
   @ManyToMany(() => Role, role => role.permisos)
   roles: Role[];
 

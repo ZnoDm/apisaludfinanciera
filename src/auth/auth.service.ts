@@ -12,6 +12,7 @@ import { Person } from '../person/entities/person.entity';
 import { Role } from '../rol/entities/rol.entity';
 import { ValidRoles } from './enums/valid-roles';
 import { UserDto } from './dto/user.dto';
+import { Permiso } from 'src/permiso/entities/permiso.entity';
 
 
 @Injectable()
@@ -120,6 +121,68 @@ export class AuthService {
 
   }
 
+  async getPermisosByUser(user: User): Promise<Permiso[]> {
+    const usuario = await this.userRepository.findOne({ where : { id: user.id }, relations: ['roles','roles.permisos'] });
+
+    if (!usuario) {
+      throw new NotFoundException(`Usuario with ID ${user.id} not found`);
+    }
+    console.log(usuario);
+
+    if (!usuario.roles || usuario.roles.length === 0) {
+      throw new NotFoundException(`Usuario with ID ${user.id} has no roles assigned`);
+    }
+
+
+    const permisosAsignados: Permiso[] = [];
+    const permisosIds: number[] = []; // Array auxiliar para almacenar IDs de permisos
+
+    usuario.roles.forEach((rol) => {
+      if (rol.permisos && rol.permisos.length > 0) {
+        rol.permisos.forEach((permiso) => {
+          if (!permisosIds.includes(permiso.id)) { // Verificar si el permiso ya está en la lista
+            permisosIds.push(permiso.id); // Agregar el ID del permiso al array auxiliar
+            permisosAsignados.push(permiso); // Agregar el permiso a la lista
+          }
+        });
+      }
+    });
+
+    const permisosOrganizados = this.organizarPermisosEnArbol(permisosAsignados);
+    return this.ordenarPorOrden(permisosOrganizados);
+  }
+
+  private ordenarPorOrden(arreglo) {
+    arreglo.sort((a, b) => a.orden - b.orden);
+    return arreglo;
+  }
+
+
+  organizarPermisosEnArbol(permisos: Permiso[]): any [] {
+    const permisosConHijos: { [key: number]: any } = {};
+  
+    // Primero, construye un objeto con todos los permisos y sus hijos vacíos
+    permisos.forEach((permiso) => {
+      permisosConHijos[permiso.id] = {
+        ...permiso,
+        subNavegacion: []
+      };
+    });
+  
+    // Luego, agrupa los permisos bajo sus permisos padres
+    const permisosArbol: any [] = [];
+    permisos.forEach((permiso) => {
+      if (permiso.idPermisoPadre !== null && permisosConHijos[permiso.idPermisoPadre]) {
+        permisosConHijos[permiso.idPermisoPadre].subNavegacion.push(permisosConHijos[permiso.id]);
+      } else {
+        permisosArbol.push(permisosConHijos[permiso.id]);
+      }
+    });
+  
+    return permisosArbol;
+  }
+
+
   private getJwtToken( payload: JwtPayload ) {
 
     const token = this.jwtService.sign( payload );
@@ -135,5 +198,7 @@ export class AuthService {
     throw new InternalServerErrorException(error.message || 'Ocurrió un error interno en el servidor');
 
   }
+
+
 
 }
