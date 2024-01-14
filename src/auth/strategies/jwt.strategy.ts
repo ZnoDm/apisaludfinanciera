@@ -25,7 +25,7 @@ export class JwtStrategy extends PassportStrategy( Strategy ) {
 
 
     async validate( payload: JwtPayload ): Promise<User> {
-        console.log('validate strategy payload',payload);
+        // console.log('validate strategy payload',payload);
         const { email, id } = payload;
 
         const user = await this.userRepository.findOne({
@@ -39,7 +39,7 @@ export class JwtStrategy extends PassportStrategy( Strategy ) {
         if ( !user.isActive ) 
             throw new UnauthorizedException('User is inactive, talk with an admin');
 
-        console.log('validate strategy',user);
+        // console.log('validate strategy',user);
         return user;
     }
 

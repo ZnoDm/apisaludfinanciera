@@ -98,7 +98,7 @@ export class AuthService {
 
     const jwtPayload: JwtPayload = {  id: user.id, email: user.email}
 
-    console.log('login service',user)
+    // console.log('login service',user)
 
     return {
       ok: true,
@@ -108,7 +108,7 @@ export class AuthService {
   }
 
   async checkAuthStatus( user: User ){
-    console.log('check-status service',user)
+    // console.log('check-status service',user)
 
     //*Limpiar data para mostrar
     delete user.roles;
@@ -127,7 +127,7 @@ export class AuthService {
     if (!usuario) {
       throw new NotFoundException(`Usuario with ID ${user.id} not found`);
     }
-    console.log(usuario);
+    // console.log(usuario);
 
     if (!usuario.roles || usuario.roles.length === 0) {
       throw new NotFoundException(`Usuario with ID ${user.id} has no roles assigned`);

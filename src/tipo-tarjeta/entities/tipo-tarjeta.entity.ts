@@ -1,6 +1,7 @@
 import { Banco } from "src/banco/entities/banco.entity";
 import { ProveedorTarjeta } from "src/proveedor-tarjeta/entities/proveedor-tarjeta.entity";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToOne, JoinColumn, BeforeInsert, BeforeUpdate, ManyToOne, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Tarjeta } from "src/tarjeta/entities/tarjeta.entity";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToOne, JoinColumn, BeforeInsert, BeforeUpdate, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 
 @Entity('tipo_tarjeta')
 export class TipoTarjeta {
@@ -21,14 +22,18 @@ export class TipoTarjeta {
 
     @Column('varchar', { length: 1000, nullable: true  })
     urlImagen: string;
-  
-    @BeforeInsert()
-    checkFieldsBeforeInsert() {
-        this.nombre = this.nombre.toLowerCase().trim();
-    }
+    
 
-    @BeforeUpdate()
-    checkFieldsBeforeUpdate() {
-        this.checkFieldsBeforeInsert();   
-    }
+    @OneToMany(() => Tarjeta, (tarjeta) => tarjeta.tipoTarjeta)
+    tarjetas: Tarjeta[];
+
+    // @BeforeInsert()
+    // checkFieldsBeforeInsert() {
+    //     this.nombre = this.nombre.toLowerCase().trim();
+    // }
+
+    // @BeforeUpdate()
+    // checkFieldsBeforeUpdate() {
+    //     this.checkFieldsBeforeInsert();   
+    // }
 }

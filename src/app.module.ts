@@ -10,7 +10,6 @@ import { PersonModule } from './person/person.module';
 import { TarjetaModule } from './tarjeta/tarjeta.module';
 // import { TipoCuentaModule } from './tipo-cuenta/tipo-cuenta.module';
 // import { TipoGastoModule } from './tipo-gasto/tipo-gasto.module';
-import { CategoriaGastoModule } from './categoria-gasto/categoria-gasto.module';
 import { UsersModule } from './users/users.module';
 import { RolModule } from './rol/rol.module';
 import { PermisoModule } from './permiso/permiso.module';
@@ -47,15 +46,7 @@ import { CronogramaTarjetaModule } from './cronograma-tarjeta/cronograma-tarjeta
 
     PersonModule,
 
-    // CuentaModule,
-
     TarjetaModule,
-
-    // TipoCuentaModule,
-
-    // TipoGastoModule,
-
-    CategoriaGastoModule,
 
     UsersModule,
 
@@ -76,6 +67,6 @@ import { CronogramaTarjetaModule } from './cronograma-tarjeta/cronograma-tarjeta
 })
 export class AppModule {
   constructor(){
-    console.log(process.env);
+    // console.log(process.env);
   }
 }

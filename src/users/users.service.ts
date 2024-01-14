@@ -117,8 +117,8 @@ export class UsersService {
     if (isActive && existingRolIndex === -1) {
       user.roles.push(role);
     } else if (!isActive && existingRolIndex !== -1) {
-      console.log(isActive )
-      console.log( existingRolIndex)
+      // console.log(isActive )
+      // console.log( existingRolIndex)
       user.roles.splice(existingRolIndex, 1);
     }
 
