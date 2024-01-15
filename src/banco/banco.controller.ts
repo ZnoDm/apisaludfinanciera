@@ -35,4 +35,11 @@ export class BancoController {
   delete(@Param('id') id: string) {
     return this.bancoService.delete(+id);
   }
+
+  @Get('listar')
+  @Auth()
+  getListar() {
+    return this.bancoService.getListar();
+  }
+
 }

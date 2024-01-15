@@ -55,4 +55,12 @@ export class BancoService {
       }
     }
   }
+
+  async getListar() {
+    const bancos: Banco[] = await this.bancoRepository.find(
+      {select: { id: true, nombre:true}}
+    );
+    return bancos;
+  }
+
 }

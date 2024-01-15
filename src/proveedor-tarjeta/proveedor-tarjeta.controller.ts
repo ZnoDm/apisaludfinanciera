@@ -35,4 +35,11 @@ export class ProveedorTarjetaController {
   delete(@Param('id') id: string) {
     return this.proveedorTarjetaService.delete(+id);
   }
+
+  @Get('listar')
+  @Auth()
+  getListar() {
+    return this.proveedorTarjetaService.getListar();
+  }
+
 }

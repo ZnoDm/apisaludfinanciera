@@ -34,4 +34,10 @@ export class TipoTarjetaController {
   delete(@Param('id') id: string) {
     return this.tipoTarjetaService.delete(+id);
   }
+
+  @Get('listar')
+  @Auth()
+  getListar() {
+    return this.tipoTarjetaService.getListar();
+  }
 }

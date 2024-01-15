@@ -56,4 +56,12 @@ export class TipoTarjetaService {
       }
     }
   }
+
+  async getListar() {
+    const tipoTarjetas: TipoTarjeta[] = await this.tipoTarjetaRepository.find(
+      {select: { id: true, nombre: true }}
+    );
+    return tipoTarjetas;
+  }
+
 }

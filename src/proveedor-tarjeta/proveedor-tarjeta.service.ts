@@ -55,4 +55,11 @@ export class ProveedorTarjetaService {
       }
     }
   }
+
+  async getListar() {
+    const proveedorTarjetas: ProveedorTarjeta[] = await this.proveedorTarjetaRepository.find(
+      {select: { id: true, nombre:true }}
+    );
+    return proveedorTarjetas;
+  }
 }
