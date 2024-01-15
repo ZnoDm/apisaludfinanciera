@@ -10,7 +10,7 @@ export class CreateTarjetaDto {
     @IsBoolean()
     isActive: boolean;
     @IsBoolean()
-    isCelular: boolean;
+    hasNotifyCelular: boolean;
     @IsBoolean()
-    isEmail: boolean;
+    hasNotifyEmail: boolean;
 }
