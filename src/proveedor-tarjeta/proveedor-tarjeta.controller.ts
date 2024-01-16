@@ -9,6 +9,13 @@ import { Auth } from 'src/auth/decorators';
 export class ProveedorTarjetaController {
   constructor(private readonly proveedorTarjetaService: ProveedorTarjetaService) {}
   
+  
+  @Get('listar')
+  @Auth()
+  getListar() {
+    return this.proveedorTarjetaService.getListar();
+  }
+
   @Get('')
   @Auth()
   findAll() {
@@ -34,12 +41,6 @@ export class ProveedorTarjetaController {
   @Delete(':id')
   delete(@Param('id') id: string) {
     return this.proveedorTarjetaService.delete(+id);
-  }
-
-  @Get('listar')
-  @Auth()
-  getListar() {
-    return this.proveedorTarjetaService.getListar();
   }
 
 }

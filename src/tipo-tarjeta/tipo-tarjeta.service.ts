@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTipoTarjetaDto } from './dto/create-tipo-tarjeta.dto';
 import { UpdateTipoTarjetaDto } from './dto/update-tipo-tarjeta.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TipoTarjeta } from './entities/tipo-tarjeta.entity';
 import { Repository } from 'typeorm';
+import { Banco } from '../banco/entities/banco.entity';
+import { ProveedorTarjeta } from 'src/proveedor-tarjeta/entities/proveedor-tarjeta.entity';
 
 @Injectable()
 export class TipoTarjetaService {
@@ -11,6 +13,10 @@ export class TipoTarjetaService {
   constructor(
     @InjectRepository(TipoTarjeta)
     private readonly tipoTarjetaRepository: Repository<TipoTarjeta>,
+    @InjectRepository(Banco)
+    private readonly bancoRepository: Repository<Banco>,
+    @InjectRepository(ProveedorTarjeta)
+    private readonly proveedorTarjetaRepository: Repository<ProveedorTarjeta>,
   ) {}
   
   async findAll() : Promise<TipoTarjeta[]> {
@@ -57,10 +63,24 @@ export class TipoTarjetaService {
     }
   }
 
-  async getListar() {
-    const tipoTarjetas: TipoTarjeta[] = await this.tipoTarjetaRepository.find(
-      {select: { id: true, nombre: true }}
-    );
+  async getListar(bancoId,proveedorTarjetaId) {
+    console.log(bancoId,proveedorTarjetaId);
+
+    const banco = await this.bancoRepository.findOne({where : {id:bancoId}});
+    if (!banco) {
+      throw new NotFoundException(`Banco with ID ${bancoId} not found`);
+    }
+    const proveedorTarjeta = await this.proveedorTarjetaRepository.findOne({where : {id: proveedorTarjetaId} });
+    if (!proveedorTarjeta) {
+      throw new NotFoundException(`ProveedorTarjeta with ID ${proveedorTarjetaId} not found`);
+    }
+
+    const tipoTarjetas: TipoTarjeta[] = await this.tipoTarjetaRepository.find({
+      where: { banco: {id: banco.id},proveedorTarjeta:{id:proveedorTarjeta.id}},
+      select: { id: true, nombre: true },
+      relations: ['banco','proveedorTarjeta']
+    });
+    console.log(tipoTarjetas);
     return tipoTarjetas;
   }
 

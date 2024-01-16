@@ -1,15 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTipoCierreDto } from './dto/create-tipo-cierre.dto';
 import { UpdateTipoCierreDto } from './dto/update-tipo-cierre.dto';
 import { TipoCierre } from './entities/tipo-cierre.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Banco } from 'src/banco/entities/banco.entity';
 
 @Injectable()
 export class TipoCierreService {
   constructor(
     @InjectRepository(TipoCierre)
     private readonly tipoCierreRepository: Repository<TipoCierre>,
+    @InjectRepository(Banco)
+    private readonly bancoRepository: Repository<Banco>,
   ) {}
 
   async findAll() : Promise<TipoCierre[]> {
@@ -56,10 +59,21 @@ export class TipoCierreService {
     }
   }
 
-  async getListar() {
-    const tipoCierres: TipoCierre[] = await this.tipoCierreRepository.find(
-      {select: { id: true, nombre:true }}
-    );
+
+  async getListar(bancoId) {
+    console.log(bancoId);
+
+    const banco = await this.bancoRepository.findOne({where : {id:bancoId}});
+    if (!banco) {
+      throw new NotFoundException(`Banco with ID ${bancoId} not found`);
+    }
+
+    const tipoCierres: TipoCierre[] = await this.tipoCierreRepository.find({
+      where: { banco: {id: banco.id}},
+      select: { id: true, nombre: true },
+      relations: ['banco']
+    });
+    console.log(tipoCierres);
     return tipoCierres;
   }
 

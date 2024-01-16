@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, Query } from '@nestjs/common';
 import { TipoCierreService } from './tipo-cierre.service';
 import { CreateTipoCierreDto } from './dto/create-tipo-cierre.dto';
 import { UpdateTipoCierreDto } from './dto/update-tipo-cierre.dto';
@@ -8,6 +8,16 @@ import { Auth } from 'src/auth/decorators';
 @Controller('tipo-cierre')
 export class TipoCierreController {
   constructor(private readonly tipoCierreService: TipoCierreService) {}
+
+  
+  @Get('/listar')
+  @Auth()
+  getListar(
+    @Query() query
+  ) {
+    return this.tipoCierreService.getListar(query.bancoId);
+  }
+
   @Get('')
   @Auth()
   findAll() {
@@ -35,9 +45,4 @@ export class TipoCierreController {
     return this.tipoCierreService.delete(+id);
   }
 
-  @Get('listar')
-  @Auth()
-  getListar() {
-    return this.tipoCierreService.getListar();
-  }
 }
