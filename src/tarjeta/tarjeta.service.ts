@@ -115,6 +115,43 @@ export class TarjetaService {
     }
     return await this.tarjetaRepository.query("spGetTarjetasCreditoByPerson @prmintIdPerson="+usuario.person.id +"");
   }
+  async getAniosByTarjeta (idTarjeta:number ,user: User){
+
+    const usuario = await this.userRepository.findOne({where : {id:user.id , isActive : true} , relations : ['person']});
+    if (!usuario) {
+      throw new NotFoundException(`Usuario with ID ${user.id} not found`);
+    }
+    const tarjeta = await this.tarjetaRepository.findOne({ where :{id: idTarjeta}, relations : ['person']});
+    if(tarjeta.person.id != usuario.person.id){
+      throw new NotFoundException(`La tarjeta with ID ${idTarjeta} no le pertenece a este Usuario with ID ${user.id}`);
+    }
+    const ultimoPago : TarjetaPago = await this.tarjetaPagoRepository
+    .createQueryBuilder('CT')
+    .orderBy('CT.anio * 100 + CT.mes', 'ASC')
+    .getOne();
+    let anioFin: number;
+
+    console.log(ultimoPago);
+    if(ultimoPago !=null && ultimoPago?.mes == 12){
+      anioFin = ultimoPago.anio + 1
+    }else if(ultimoPago !=null && ultimoPago?.anio){
+      anioFin = ultimoPago.anio 
+    }else{
+      anioFin = tarjeta.anioInicio
+    }
+
+    return this.crearArrayAnios(tarjeta.anioInicio,anioFin,anioFin);
+
+  }
+
+  crearArrayAnios(anioInicio: number,anioFin:number, anioActual: number) {
+    const miArray = [];
+    for (var i = anioInicio; i <= anioFin; i++) {
+        miArray.push({ value: i, nombre: i , current: (i == anioActual) ? true : false });
+    }
+    return miArray;
+  }
+
 
   async getPeriodosByTarjeta (idTarjeta:number ,user: User,anio:number){
 
@@ -129,6 +166,7 @@ export class TarjetaService {
     console.log(tarjeta.person.id,usuario.person.id)
     return await this.tarjetaRepository.query("spGetPeriodosByTarjetaCredito  @prmintIdTarjetaCredito ="+idTarjeta +",@prmintAnio ="+anio );
   }
+ 
 
   async getCronogramaByTarjeta (idTarjeta:number ,user: User,anio:number,mes:number){
     const usuario = await this.userRepository.findOne({where : {id:user.id , isActive : true} , relations : ['person']});

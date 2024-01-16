@@ -15,7 +15,7 @@ export class CronogramaTarjetaService {
   
 
   async findAll() : Promise<CronogramaTarjeta[]> {
-    const cronogramaTarjetas: CronogramaTarjeta[] = await this.cronogramaTarjetaRepository.find({relations:['banco','tipoCierre']});
+    const cronogramaTarjetas: CronogramaTarjeta[] = await this.cronogramaTarjetaRepository.find({relations:['tipoCierre']});
     return cronogramaTarjetas;
   }
   async findOneById(id: number): Promise<CronogramaTarjeta | undefined> {

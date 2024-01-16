@@ -44,6 +44,15 @@ export class TarjetaController {
     return this.tarjetaService.delete(+id);
   }
 
+  @Get(':id/recordatorio/anios')
+  @Auth()
+  getAniosByTarjeta(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ) {
+    return this.tarjetaService.getAniosByTarjeta(+id,user);
+  }
+
   @Get(':id/recordatorio/periodos')
   @Auth()
   getPeriodosByTarjeta(

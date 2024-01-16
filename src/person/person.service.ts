@@ -44,7 +44,7 @@ export class PersonService {
     return {
       ok: true,
       message:  "Datos actualizados con éxito.",
-      person: personUpdated
+      user: user
     }
   }
 
@@ -82,7 +82,7 @@ export class PersonService {
     return {
       ok: true,
       message:  "Avatar actualizados con éxito.",
-      person: personUpdated
+      user: user
     }
   }
 

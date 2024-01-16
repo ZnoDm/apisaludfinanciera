@@ -7,10 +7,6 @@ export class UpdatePersonPasswordDto extends PartialType(CreatePersonDto) {
     @IsString()
     @MinLength(6)
     @MaxLength(50)
-    @Matches(
-        /(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-        message: 'The password must have a Uppercase, lowercase letter and a number'
-    })
     oldPassword: string;
   
 
@@ -19,7 +15,7 @@ export class UpdatePersonPasswordDto extends PartialType(CreatePersonDto) {
     @MaxLength(50)
     @Matches(
         /(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-        message: 'The password must have a Uppercase, lowercase letter and a number'
+        message: 'The new password must have a Uppercase, lowercase letter and a number'
     })
     newPassword: string;
 
@@ -28,7 +24,7 @@ export class UpdatePersonPasswordDto extends PartialType(CreatePersonDto) {
     @MaxLength(50)
     @Matches(
         /(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-        message: 'The password must have a Uppercase, lowercase letter and a number'
+        message: 'The new confirm password must have a Uppercase, lowercase letter and a number'
     })
     confirmPassword: string;
     

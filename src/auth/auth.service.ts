@@ -158,7 +158,7 @@ export class AuthService {
   }
 
 
-  organizarPermisosEnArbol(permisos: Permiso[]): any [] {
+  private organizarPermisosEnArbol(permisos: Permiso[]): any [] {
     const permisosConHijos: { [key: number]: any } = {};
   
     // Primero, construye un objeto con todos los permisos y sus hijos vacíos
