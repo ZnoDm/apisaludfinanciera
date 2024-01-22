@@ -18,6 +18,8 @@ import { TipoTarjetaModule } from './tipo-tarjeta/tipo-tarjeta.module';
 import { ProveedorTarjetaModule } from './proveedor-tarjeta/proveedor-tarjeta.module';
 import { TipoCierreModule } from './tipo-cierre/tipo-cierre.module';
 import { CronogramaTarjetaModule } from './cronograma-tarjeta/cronograma-tarjeta.module';
+import { CuentaModule } from './cuenta/cuenta.module';
+import { MetaModule } from './meta/meta.module';
 
 @Module({
   imports: [
@@ -63,6 +65,10 @@ import { CronogramaTarjetaModule } from './cronograma-tarjeta/cronograma-tarjeta
     TipoCierreModule,
 
     CronogramaTarjetaModule,
+
+    CuentaModule,
+
+    MetaModule,
   ],
 })
 export class AppModule {
