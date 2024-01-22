@@ -35,8 +35,8 @@ export class TarjetaController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTarjetaDto: Partial<Tarjeta>) {
-    return this.tarjetaService.update(+id, updateTarjetaDto);
+  update(@Param('id') id: string,   @GetUser() user: User ,@Body() updateTarjetaDto: CreateTarjetaDto) {
+    return this.tarjetaService.update(+id, user,updateTarjetaDto);
   }
 
   @Delete(':id')

@@ -75,13 +75,38 @@ export class TarjetaService {
     };
   }
 
-  async update(id: number, tarjetaData: Partial<Tarjeta>): Promise<any> {
-    await this.tarjetaRepository.update(id, tarjetaData);
-    const updatedTarjeta: Tarjeta | undefined = await this.tarjetaRepository.findOne({where: {id}});
+  async update(idTarjeta: number, user: User,updateTarjetaDto: CreateTarjetaDto): Promise<any> {
+
+    const usuario = await this.userRepository.findOne({where : {id:user.id , isActive : true} , relations : ['person']});
+    if (!usuario) {
+      throw new NotFoundException(`Usuario with ID ${user.id} not found`);
+    }
+    const tarjeta = await this.tarjetaRepository.findOne({ where :{id: idTarjeta}, relations : ['person']});
+    if(tarjeta.person.id != usuario.person.id){
+      throw new NotFoundException(`La tarjeta with ID ${idTarjeta} no le pertenece a este Usuario with ID ${user.id}`);
+    }
+
+    const { tipoTarjetaId, tipoCierreId, ...tarjetaData } = updateTarjetaDto;
+    const tipoTarjeta = await this.tipoTarjetaRepository.findOne({where : {id:tipoTarjetaId}});
+    if (!tipoTarjeta) {
+        throw new NotFoundException(`TipoTarjeta con ID ${tipoTarjetaId} no encontrado`);
+    }
+    const tipoCierre = await this.tipoCierreRepository.findOne({where : {id:tipoCierreId}});
+    if (!tipoCierre) {
+      throw new NotFoundException(`TipoCierre con ID ${tipoCierreId} no encontrado`);
+    }
+    tarjeta.tipoTarjeta = tipoTarjeta;
+    tarjeta.tipoCierre = tipoCierre;
+    tarjeta.nombre = tarjetaData.nombre;
+    tarjeta.hasNotifyCelular = tarjetaData.hasNotifyCelular;
+    tarjeta.hasNotifyEmail = tarjetaData.hasNotifyEmail;
+    tarjeta.isActive = tarjetaData.isActive;
+
+    await this.tarjetaRepository.update(idTarjeta, tarjeta);
     return {
       ok: true,
       message : `Actualizado con éxito`,
-      rol: updatedTarjeta
+      tarjeta: tarjeta
     };
   }
 

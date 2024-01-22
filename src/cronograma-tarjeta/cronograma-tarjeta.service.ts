@@ -29,7 +29,7 @@ export class CronogramaTarjetaService {
     return {
       ok: true,
       message : `Creado con éxito`,
-      rol: savedCronogramaTarjeta
+      cronograma: savedCronogramaTarjeta
     };
   }
 
@@ -39,7 +39,7 @@ export class CronogramaTarjetaService {
     return {
       ok: true,
       message : `Actualizado con éxito`,
-      rol: updatedCronogramaTarjeta
+      cronograma: updatedCronogramaTarjeta
     };
   }
 
