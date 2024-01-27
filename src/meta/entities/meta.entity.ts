@@ -11,6 +11,9 @@ export class Meta {
     @Column('varchar', { length: 200, nullable: false })
     nombre: string;
 
+    @Column('varchar', { length: 200, nullable: true })
+    icon: string;
+
     @ManyToMany(() => Cuenta, cuenta => cuenta.metas)
     cuentas: Cuenta[];
 }

@@ -102,7 +102,8 @@ export class TarjetaService {
     tarjeta.hasNotifyEmail = tarjetaData.hasNotifyEmail;
     tarjeta.isActive = tarjetaData.isActive;
 
-    await this.tarjetaRepository.update(idTarjeta, tarjeta);
+    const {id, ...tarjetaToUpdate} =  tarjeta
+    await this.tarjetaRepository.update(idTarjeta, tarjetaToUpdate);
     return {
       ok: true,
       message : `Actualizado con éxito`,

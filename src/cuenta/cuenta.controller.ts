@@ -5,18 +5,34 @@ import { UpdateCuentaDto } from './dto/update-cuenta.dto';
 import { Cuenta } from './entities/cuenta.entity';
 import { Auth, GetUser } from 'src/auth/decorators';
 import { User } from 'src/users/entities/user.entity';
+import { CreateCuentaGastoDto } from './dto/create-cuenta-gasto.dto';
 
 @Controller('cuenta')
 export class CuentaController {
   constructor(private readonly cuentaService: CuentaService) {}
-
 
   @Get('/listar')
   @Auth()
   getListar() {
     return this.cuentaService.getListar();
   }
- 
+
+  @Get('/listar/user')
+  @Auth()
+  findAllByUser(
+    @GetUser() user: User ,
+  ) {
+    return this.cuentaService.findAllByUser(user);
+  }
+
+  @Get('/resumen/user')
+  @Auth()
+  getResumenGastoByPerson(
+    @GetUser() user: User ,
+  ) {
+    return this.cuentaService.getResumenGastoByPerson(user);
+  }
+
   @Get('')
   @Auth()
   findAll() {
@@ -29,10 +45,18 @@ export class CuentaController {
   }
 
   @Post()
+  @Auth()
   create(
     @GetUser() user: User ,
     @Body() createCuentaDto: Partial<CreateCuentaDto>) {
     return this.cuentaService.create(user, createCuentaDto);
+  }
+  @Post('/gasto/add')
+  @Auth()
+  createCuentaGasto(
+    @GetUser() user: User ,
+    @Body() createCuentaGastoDto: Partial<CreateCuentaGastoDto>) {
+    return this.cuentaService.addGasto(user, createCuentaGastoDto);
   }
 
 
@@ -45,6 +69,9 @@ export class CuentaController {
   delete(@Param('id') id: string) {
     return this.cuentaService.delete(+id);
   }
- 
+  
+
+
+
 
 }

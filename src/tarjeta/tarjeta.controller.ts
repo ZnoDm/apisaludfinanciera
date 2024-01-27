@@ -35,13 +35,21 @@ export class TarjetaController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string,   @GetUser() user: User ,@Body() updateTarjetaDto: CreateTarjetaDto) {
+  @Auth()
+  update(
+    @Param('id') id: string,   
+    @GetUser() user: User ,
+    @Body() updateTarjetaDto: CreateTarjetaDto) {
     return this.tarjetaService.update(+id, user,updateTarjetaDto);
   }
 
   @Delete(':id')
   delete(@Param('id') id: string) {
     return this.tarjetaService.delete(+id);
+  }
+  @Post(':id/enabled-disabled')
+  enabledDisabledTarjeta(@Param('id') id: string) {
+    return this.tarjetaService.enabledDisabledTarjeta(+id);
   }
 
   @Get(':id/recordatorio/anios')

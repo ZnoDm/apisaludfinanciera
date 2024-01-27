@@ -20,6 +20,8 @@ import { TipoCierreModule } from './tipo-cierre/tipo-cierre.module';
 import { CronogramaTarjetaModule } from './cronograma-tarjeta/cronograma-tarjeta.module';
 import { CuentaModule } from './cuenta/cuenta.module';
 import { MetaModule } from './meta/meta.module';
+import { TipoGastoModule } from './tipo-gasto/tipo-gasto.module';
+import { CategoriaGastoModule } from './categoria-gasto/categoria-gasto.module';
 
 @Module({
   imports: [
@@ -69,6 +71,10 @@ import { MetaModule } from './meta/meta.module';
     CuentaModule,
 
     MetaModule,
+
+    TipoGastoModule,
+
+    CategoriaGastoModule,
   ],
 })
 export class AppModule {
