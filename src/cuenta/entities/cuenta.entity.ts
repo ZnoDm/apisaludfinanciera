@@ -38,8 +38,6 @@ export class Cuenta {
     })
     metas: Meta[];
 
-    @Column('varchar', { length: 200, nullable: true })
-    otraMeta: string;
 
     @ManyToOne(() => Person, (person) => person.cuentas)
     @JoinColumn({ name: 'person_id' })

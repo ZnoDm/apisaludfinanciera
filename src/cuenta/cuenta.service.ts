@@ -55,6 +55,43 @@ export class CuentaService {
     return await this.cuentaRepository.query("spGetResumenGastoByPerson  @prmintIdPerson ="+usuario.person.id );
   }
 
+  
+  async getHistoriaCuentaByPerson(idCuenta:number,user: User): Promise<any> {
+    const usuario = await this.userRepository.findOne({where : {id:user.id , isActive : true} , relations : ['person']});
+        if (!usuario) {
+      throw new NotFoundException(`Usuario with ID ${user.id} not found`);
+    }
+
+    const historias : any[] =  await this.cuentaRepository.query("spGetHistoriaCuentaByPerson  @prmintIdPerson ="+usuario.person.id +",@prmintIdCuenta = " + idCuenta);
+    const historiaAgrupadaPorMes: { [mes: string]: any[] } = {};
+
+    historias.forEach(historia => {
+      const { NombreMes } = historia;
+
+      if (!historiaAgrupadaPorMes[NombreMes]) {
+          historiaAgrupadaPorMes[NombreMes] = [];
+      }
+
+      historiaAgrupadaPorMes[NombreMes].push(historia);
+    });
+
+    const resultado: any[] = Object.keys(historiaAgrupadaPorMes).map(mes => ({
+        mes,
+        historias: historiaAgrupadaPorMes[mes]
+    }));
+
+    return resultado;
+
+  }
+
+  async donaHistorial(user: User): Promise<any> {
+    const usuario = await this.userRepository.findOne({where : {id:user.id , isActive : true} , relations : ['person']});
+        if (!usuario) {
+      throw new NotFoundException(`Usuario with ID ${user.id} not found`);
+    }
+    return await this.cuentaRepository.query("spGetGraficoDonaResumen  @prmintIdPerson ="+usuario.person.id );
+  }
+
   async create(user: User,CreateCuentaDto: Partial<CreateCuentaDto>): Promise<any> {
 
     const { metaId, ...cuentaData } = CreateCuentaDto;
@@ -121,7 +158,7 @@ export class CuentaService {
       throw new NotFoundException(`Usuario with ID ${user.id} not found`);
     }
 
-    const {cuentaId,tipoGastoId, categoriaGastoDto,fecha,monto} = createCuentaGastoDto;
+    const {cuentaId,tipoGastoId, categoriaGasto: categoriaGastoNombre ,fecha,monto} = createCuentaGastoDto;
 
     const tipoGasto = await this.tipoGastoRepository.findOne({where : {id:tipoGastoId}});
     if (!tipoGasto) {
@@ -132,34 +169,13 @@ export class CuentaService {
       throw new NotFoundException(`Cuenta con ID ${cuentaId} no encontrado`);
     }
 
-    let categoriaGasto : CategoriaGasto;
-    if(categoriaGastoDto.id != 0){
-      categoriaGasto = await this.categoriaGastoRepository.findOne({where : {id:categoriaGastoDto.id}});
-      if (!categoriaGasto) {
-        throw new NotFoundException(`Categoria con ID ${categoriaGastoDto.id} no encontrado`);
-      }
-    }else{
-      const newCategoriaGasto: CategoriaGasto = await this.categoriaGastoRepository.create({
-        person : usuario.person,
-        tipoGasto: tipoGasto,
-        nombre: categoriaGastoDto.nombre,
-      });
-      categoriaGasto =  await this.categoriaGastoRepository.save(newCategoriaGasto);
-    }
-
-    const cuentaGasto = new CuentaGasto();
-    cuentaGasto.categoriaGasto = categoriaGasto;
-    cuentaGasto.tipoGasto = tipoGasto;
-    cuentaGasto.cuenta = cuenta;
-    cuentaGasto.fechaRegistro = fecha;
-    cuentaGasto.monto = monto;
-
-    await this.cuentaGastoRepository.save(cuentaGasto);
+  
+    const categoriaGastoFormat = categoriaGastoNombre.replace(/\s/g, '').toLowerCase();
 
     return {
       ok: true,
-      message : `Creado con éxito`,
-      cuentaGasto: cuentaGasto
+      message : `Gasto registrado con éxito`,
+      cuentaGasto: await this.cuentaRepository.query("spSaveCuentaGasto @prmintIdPerson ="+usuario.person.id +",@prmintIdTipoGasto ="+tipoGasto.id +",@prmintIdCuenta ="+cuenta.id +",@prmstrCategoriaGasto ="+ categoriaGastoFormat+",@prmstrFecha ='"+fecha +"',@prmintMonto ="+monto)
     };
   }
 }

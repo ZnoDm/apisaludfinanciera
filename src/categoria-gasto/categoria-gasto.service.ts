@@ -5,6 +5,7 @@ import { CategoriaGasto } from './entities/categoria-gasto.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
+import { TipoGasto } from 'src/tipo-gasto/entities/tipo-gasto.entity';
 
 @Injectable()
 export class CategoriaGastoService {
@@ -13,6 +14,8 @@ export class CategoriaGastoService {
     private readonly categoriaGastoRepository: Repository<CategoriaGasto>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(TipoGasto)
+    private readonly tipoGastoRepository: Repository<TipoGasto>,
   ) {}
 
   async findAll() : Promise<CategoriaGasto[]> {
@@ -29,7 +32,11 @@ export class CategoriaGastoService {
       throw new NotFoundException(`Usuario with ID ${user.id} not found`);
     }
     let array_final: any = [];
-    const array_temporal: any = await this.categoriaGastoRepository.query("spGetCategoriaGastosByPerson  @prmintIdPerson ="+usuario.person.id );
+    const tipoGasto = await this.tipoGastoRepository.findOne({where : {id:idTipoGasto}});
+    if (!tipoGasto) {
+        throw new NotFoundException(`Tipo Gasto con ID ${idTipoGasto} no encontrado`);
+    }
+    const array_temporal: any = await this.categoriaGastoRepository.query("spGetCategoriaGastosByPerson  @prmintIdPerson ="+usuario.person.id +",@prmintIdTipoGasto ="+tipoGasto.id);
     console.log(array_temporal)
     if(array_temporal.length <= 0){
       array_final = await this.categoriaGastoRepository.find({

@@ -10,8 +10,8 @@ export class CreateCuentaGastoDto {
     @IsNumber()
     tipoGastoId: number;
 
-    @Type(() => CategoriaGastoDto)
-    categoriaGastoDto: CategoriaGastoDto;
+    @IsString()
+    categoriaGasto: string;
 
     @IsDate()
     fecha: Date;

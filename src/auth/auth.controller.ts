@@ -33,7 +33,7 @@ export class AuthController {
   }
 
   @Get('permisos')
-  @Auth()
+  @Auth(ValidRoles.admin,ValidRoles.user)
   findPermisos( @GetUser() user: User) {
     return this.authService.getPermisosByUser(user);
   }

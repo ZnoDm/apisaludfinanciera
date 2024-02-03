@@ -11,10 +11,25 @@ import { CreateCuentaGastoDto } from './dto/create-cuenta-gasto.dto';
 export class CuentaController {
   constructor(private readonly cuentaService: CuentaService) {}
 
+  @Get('/grafico/donaHistorial')
+  @Auth()
+  donaHistorial(
+    @GetUser() user: User 
+  ) {
+    return this.cuentaService.donaHistorial(user);
+  }
+  
   @Get('/listar')
   @Auth()
   getListar() {
     return this.cuentaService.getListar();
+  }
+  @Get(':id/historial')
+  @Auth()
+  getHistoriaCuentaByPerson(
+    @GetUser() user: User ,
+    @Param('id') id: string) {
+    return this.cuentaService.getHistoriaCuentaByPerson(+id,user);
   }
 
   @Get('/listar/user')

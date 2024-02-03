@@ -1,8 +1,6 @@
-import { Banco } from "src/banco/entities/banco.entity";
-import { ProveedorTarjeta } from "src/proveedor-tarjeta/entities/proveedor-tarjeta.entity";
 import { TipoCierre } from "src/tipo-cierre/entities/tipo-cierre.entity";
 import { TipoTarjeta } from "src/tipo-tarjeta/entities/tipo-tarjeta.entity";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToOne, JoinColumn, BeforeInsert, BeforeUpdate, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, BeforeInsert, BeforeUpdate, ManyToOne,  OneToMany } from "typeorm";
 import { TarjetaPago } from "./tarjeta-pago.entity";
 import { Person } from "src/person/entities/person.entity";
 

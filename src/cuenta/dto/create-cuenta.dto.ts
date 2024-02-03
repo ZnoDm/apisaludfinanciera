@@ -7,6 +7,4 @@ export class CreateCuentaDto {
     saldoMensualPromedio: number;
     @IsNumber()
     metaId: number;
-    @IsString()
-    otraMeta: string;
 }
