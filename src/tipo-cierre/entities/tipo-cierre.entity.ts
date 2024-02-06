@@ -1,6 +1,7 @@
 import { Banco } from "src/banco/entities/banco.entity";
 import { CronogramaTarjeta } from "src/cronograma-tarjeta/entities/cronograma-tarjeta.entity";
 import { ProveedorTarjeta } from "src/proveedor-tarjeta/entities/proveedor-tarjeta.entity";
+import { Tarjeta } from "src/tarjeta/entities/tarjeta.entity";
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToOne, JoinColumn, BeforeInsert, BeforeUpdate, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 
 @Entity('tipo_cierre')
@@ -19,13 +20,17 @@ export class TipoCierre {
     @OneToMany(() => CronogramaTarjeta, (cronogramaTarjeta) => cronogramaTarjeta.tipoCierre)
     cronogramaTarjetas: CronogramaTarjeta[];
 
-    @BeforeInsert()
-    checkFieldsBeforeInsert() {
-        this.nombre = this.nombre.toLowerCase().trim();
-    }
+    
+    @OneToMany(() => Tarjeta, (tarjeta) => tarjeta.tipoCierre)
+    tarjetas: Tarjeta[];
 
-    @BeforeUpdate()
-    checkFieldsBeforeUpdate() {
-        this.checkFieldsBeforeInsert();   
-    }
+    // @BeforeInsert()
+    // checkFieldsBeforeInsert() {
+    //     this.nombre = this.nombre.toLowerCase().trim();
+    // }
+
+    // @BeforeUpdate()
+    // checkFieldsBeforeUpdate() {
+    //     this.checkFieldsBeforeInsert();   
+    // }
 }

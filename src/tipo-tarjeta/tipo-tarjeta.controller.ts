@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { TipoTarjetaService } from './tipo-tarjeta.service';
 import { CreateTipoTarjetaDto } from './dto/create-tipo-tarjeta.dto';
 import { UpdateTipoTarjetaDto } from './dto/update-tipo-tarjeta.dto';
@@ -8,6 +8,15 @@ import { TipoTarjeta } from './entities/tipo-tarjeta.entity';
 @Controller('tipo-tarjeta')
 export class TipoTarjetaController {
   constructor(private readonly tipoTarjetaService: TipoTarjetaService) {}
+
+  @Get('/listar')
+  @Auth()
+  getListar(
+    @Query() query
+  ) {
+    return this.tipoTarjetaService.getListar(query.bancoId,query.proveedorTarjetaId);
+  }
+
   @Get('')
   @Auth()
   findAll() {
@@ -34,4 +43,6 @@ export class TipoTarjetaController {
   delete(@Param('id') id: string) {
     return this.tipoTarjetaService.delete(+id);
   }
+
+ 
 }

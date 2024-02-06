@@ -1,34 +1,94 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { TarjetaService } from './tarjeta.service';
 import { CreateTarjetaDto } from './dto/create-tarjeta.dto';
 import { UpdateTarjetaDto } from './dto/update-tarjeta.dto';
+import { Auth, GetUser } from 'src/auth/decorators';
+import { Tarjeta } from './entities/tarjeta.entity';
+import { User } from 'src/users/entities/user.entity';
+import { BodyRecordatorioDto } from './dto/body-recordatorio.dto';
 
 @Controller('tarjeta')
 export class TarjetaController {
   constructor(private readonly tarjetaService: TarjetaService) {}
 
-  @Post()
-  create(@Body() createTarjetaDto: CreateTarjetaDto) {
-    return this.tarjetaService.create(createTarjetaDto);
-  }
-
-  @Get()
+  @Get('')
+  @Auth()
   findAll() {
     return this.tarjetaService.findAll();
   }
 
+  
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tarjetaService.findOne(+id);
+  findOne(
+    @Param('id') id: string
+    ) {
+    return this.tarjetaService.findOneById(+id);
+  }
+
+  @Post()
+  @Auth()
+  create(
+    @GetUser() user: User ,
+    @Body() createTarjetaDto: CreateTarjetaDto
+  ) {
+    return this.tarjetaService.create(user, createTarjetaDto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTarjetaDto: UpdateTarjetaDto) {
-    return this.tarjetaService.update(+id, updateTarjetaDto);
+  @Auth()
+  update(
+    @Param('id') id: string,   
+    @GetUser() user: User ,
+    @Body() updateTarjetaDto: CreateTarjetaDto) {
+    return this.tarjetaService.update(+id, user,updateTarjetaDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tarjetaService.remove(+id);
+  delete(@Param('id') id: string) {
+    return this.tarjetaService.delete(+id);
   }
+  @Post(':id/enabled-disabled')
+  enabledDisabledTarjeta(@Param('id') id: string) {
+    return this.tarjetaService.enabledDisabledTarjeta(+id);
+  }
+
+  @Get(':id/recordatorio/anios')
+  @Auth()
+  getAniosByTarjeta(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ) {
+    return this.tarjetaService.getAniosByTarjeta(+id,user);
+  }
+
+  @Get(':id/recordatorio/periodos')
+  @Auth()
+  getPeriodosByTarjeta(
+    @Param('id') id: string,
+    @GetUser() user: User,
+    @Query() query,
+  ) {
+    return this.tarjetaService.getPeriodosByTarjeta(+id, user, +query.anio);
+  }
+  @Get(':id/recordatorio/cronograma')
+  @Auth()
+  getCronogramaByTarjeta(  
+    @Param('id') id: string, 
+    @GetUser() user: User ,
+    @Query() query,
+  ) {
+    return this.tarjetaService.getCronogramaByTarjeta(+id,user,+query.anio,+query.mes);
+  }
+
+
+  
+  @Get('/recordatorio/listar')
+  @Auth()
+  getTarjetasByPerson(
+    @GetUser() user: User ,
+  ) {
+    return this.tarjetaService.getTarjetasByPerson(user);
+  }
+ 
+ 
 }

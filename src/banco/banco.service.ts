@@ -27,7 +27,7 @@ export class BancoService {
     return {
       ok: true,
       message : `Creado con éxito`,
-      rol: savedBanco
+      banco: savedBanco
     };
   }
 
@@ -37,7 +37,7 @@ export class BancoService {
     return {
       ok: true,
       message : `Actualizado con éxito`,
-      rol: updatedBanco
+      banco: updatedBanco
     };
   }
 
@@ -55,4 +55,12 @@ export class BancoService {
       }
     }
   }
+
+  async getListar() {
+    const bancos: Banco[] = await this.bancoRepository.find(
+      {select: { id: true, nombre:true}}
+    );
+    return bancos;
+  }
+
 }

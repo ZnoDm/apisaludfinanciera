@@ -1,6 +1,9 @@
 import { Length } from 'class-validator';
 import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm'
 import { User } from '../../users/entities/user.entity';
+import { Tarjeta } from 'src/tarjeta/entities/tarjeta.entity';
+import { Cuenta } from 'src/cuenta/entities/cuenta.entity';
+import { CategoriaGasto } from 'src/categoria-gasto/entities/categoria-gasto.entity';
 // import { Cuenta } from 'src/cuenta/entities/cuenta.entity';
 
 @Entity('person') // Nombre de la tabla persona
@@ -30,6 +33,14 @@ export class Person {
     @OneToOne(() => User, user => user.person)
     user: User;
 
+    @OneToMany(() => Tarjeta, (tarjeta) => tarjeta.person)
+    tarjetas: Tarjeta[];
+
+    @OneToMany(() => Cuenta, (cuenta) => cuenta.person)
+    cuentas: Cuenta[];
+
+    @OneToMany(() => CategoriaGasto, (categoriaGasto) => categoriaGasto.person)
+    categoriaGastos: CategoriaGasto[];
 
     // @OneToMany(() => Cuenta, (cuenta) => cuenta.person)
     // cuentas: Cuenta[];

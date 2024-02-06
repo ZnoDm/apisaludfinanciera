@@ -107,8 +107,8 @@ export class RolService {
     if (isActive && existingPermisoIndex === -1) {
       role.permisos.push(permiso);
     } else if (!isActive && existingPermisoIndex !== -1) {
-      console.log(isActive )
-      console.log( existingPermisoIndex)
+      // console.log(isActive )
+      // console.log( existingPermisoIndex)
       role.permisos.splice(existingPermisoIndex, 1);
     }
 

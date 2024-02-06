@@ -9,6 +9,13 @@ import { Auth } from 'src/auth/decorators';
 export class BancoController {
   constructor(private readonly bancoService: BancoService) {}
 
+
+  @Get('/listar')
+  @Auth()
+  getListar() {
+    return this.bancoService.getListar();
+  }
+ 
   @Get('')
   @Auth()
   findAll() {
@@ -35,4 +42,6 @@ export class BancoController {
   delete(@Param('id') id: string) {
     return this.bancoService.delete(+id);
   }
+ 
+
 }

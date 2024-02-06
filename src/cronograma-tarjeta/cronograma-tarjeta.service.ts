@@ -15,7 +15,7 @@ export class CronogramaTarjetaService {
   
 
   async findAll() : Promise<CronogramaTarjeta[]> {
-    const cronogramaTarjetas: CronogramaTarjeta[] = await this.cronogramaTarjetaRepository.find({relations:['banco','tipoCierre']});
+    const cronogramaTarjetas: CronogramaTarjeta[] = await this.cronogramaTarjetaRepository.find({relations:['tipoCierre']});
     return cronogramaTarjetas;
   }
   async findOneById(id: number): Promise<CronogramaTarjeta | undefined> {
@@ -29,7 +29,7 @@ export class CronogramaTarjetaService {
     return {
       ok: true,
       message : `Creado con éxito`,
-      rol: savedCronogramaTarjeta
+      cronograma: savedCronogramaTarjeta
     };
   }
 
@@ -39,7 +39,7 @@ export class CronogramaTarjetaService {
     return {
       ok: true,
       message : `Actualizado con éxito`,
-      rol: updatedCronogramaTarjeta
+      cronograma: updatedCronogramaTarjeta
     };
   }
 

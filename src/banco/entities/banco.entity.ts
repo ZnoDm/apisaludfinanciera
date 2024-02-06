@@ -23,10 +23,6 @@ export class Banco {
     tipoCierres: TipoCierre[];
 
 
-    @OneToMany(() => CronogramaTarjeta, (cronogramaTarjeta) => cronogramaTarjeta.banco)
-    cronogramaTarjetas: CronogramaTarjeta[];
-
-
     // @BeforeInsert()
     // checkFieldsBeforeInsert() {
     //     this.nombre = this.nombre.toLowerCase().trim();

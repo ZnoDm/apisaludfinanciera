@@ -11,10 +11,6 @@ export class CronogramaTarjeta {
     @Column('varchar', { length: 200, nullable: false })
     periodo: string;
 
-    @ManyToOne(() => Banco, (banco) => banco.cronogramaTarjetas)
-    @JoinColumn({ name: 'banco_id' })
-    banco: Banco;
-  
     @ManyToOne(() => TipoCierre, (tipoCierre) => tipoCierre.cronogramaTarjetas)
     @JoinColumn({ name: 'tipoCierre_id' })
     tipoCierre: TipoCierre;
