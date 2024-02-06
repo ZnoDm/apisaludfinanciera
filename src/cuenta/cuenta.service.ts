@@ -41,10 +41,9 @@ export class CuentaService {
         if (!usuario) {
       throw new NotFoundException(`Usuario with ID ${user.id} not found`);
     }
- 
-    
     return await this.cuentaRepository.query("spGetCuentasByPerson  @prmintIdPerson ="+usuario.person.id );
   }
+
   async getResumenGastoByPerson(user: User): Promise<any> {
     const usuario = await this.userRepository.findOne({where : {id:user.id , isActive : true} , relations : ['person']});
         if (!usuario) {
@@ -63,21 +62,29 @@ export class CuentaService {
     }
 
     const historias : any[] =  await this.cuentaRepository.query("spGetHistoriaCuentaByPerson  @prmintIdPerson ="+usuario.person.id +",@prmintIdCuenta = " + idCuenta);
-    const historiaAgrupadaPorMes: { [mes: string]: any[] } = {};
+    const historiaAgrupadaPorMes: { [mes: string]: { [NumeroDia: number]: any[] } } = {};
 
     historias.forEach(historia => {
-      const { NombreMes } = historia;
+        const { NombreMes, NumeroDia, NombreDia } = historia;
 
-      if (!historiaAgrupadaPorMes[NombreMes]) {
-          historiaAgrupadaPorMes[NombreMes] = [];
-      }
+        if (!historiaAgrupadaPorMes[NombreMes]) {
+            historiaAgrupadaPorMes[NombreMes] = {};
+        }
 
-      historiaAgrupadaPorMes[NombreMes].push(historia);
+        if (!historiaAgrupadaPorMes[NombreMes][NumeroDia]) {
+            historiaAgrupadaPorMes[NombreMes][NumeroDia] = [];
+        }
+
+        historiaAgrupadaPorMes[NombreMes][NumeroDia].push(historia);
     });
 
     const resultado: any[] = Object.keys(historiaAgrupadaPorMes).map(mes => ({
         mes,
-        historias: historiaAgrupadaPorMes[mes]
+        historiasPorDia: Object.keys(historiaAgrupadaPorMes[mes]).map(NumeroDia => ({
+            NumeroDia: parseInt(NumeroDia),
+            NombreDia: historiaAgrupadaPorMes[mes][NumeroDia][0].NombreDia, // Tomamos el nombre del día de la primera historia del día
+            historias: historiaAgrupadaPorMes[mes][NumeroDia]
+        }))
     }));
 
     return resultado;
@@ -120,9 +127,25 @@ export class CuentaService {
     };
   }
 
-  async update(id: number, cuentaData: Partial<Cuenta>): Promise<any> {
-    await this.cuentaRepository.update(id, cuentaData);
-    const updatedCuenta: Cuenta | undefined = await this.cuentaRepository.findOne({where: {id}});
+  async update(idCuenta: number, user: User,updateCuentaDto: any): Promise<any> {
+
+    const usuario = await this.userRepository.findOne({where : {id:user.id , isActive : true} , relations : ['person']});
+    if (!usuario) {
+      throw new NotFoundException(`Usuario with ID ${user.id} not found`);
+    }
+    const cuenta = await this.cuentaRepository.findOne({ where :{id: idCuenta}, relations : ['person']});
+    if(cuenta.person.id != usuario.person.id){
+      throw new NotFoundException(`La cuenta with ID ${idCuenta} no le pertenece a este Usuario with ID ${user.id}`);
+    }
+    const meta = await this.metaRepository.findOne({where : {id:updateCuentaDto.metaId}});
+    if (!meta) {
+        throw new NotFoundException(`Meta con ID ${updateCuentaDto.metaId} no encontrado`);
+    }
+    cuenta.saldoMensualPromedio = updateCuentaDto.saldoMensualPromedio;
+    cuenta.nombre = updateCuentaDto.nombre;
+    cuenta.metas = [meta];
+
+    const updatedCuenta = await this.cuentaRepository.save(cuenta);
     return {
       ok: true,
       message : `Actualizado con éxito`,

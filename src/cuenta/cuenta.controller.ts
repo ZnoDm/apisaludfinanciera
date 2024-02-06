@@ -76,8 +76,9 @@ export class CuentaController {
 
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCuentaDto: Partial<Cuenta>) {
-    return this.cuentaService.update(+id, updateCuentaDto);
+  @Auth()
+  update(@Param('id') id: string, @GetUser() user: User ,@Body() updateCuentaDto: any) {
+    return this.cuentaService.update(+id, user,updateCuentaDto);
   }
 
   @Delete(':id')
