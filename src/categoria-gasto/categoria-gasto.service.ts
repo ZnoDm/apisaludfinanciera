@@ -40,6 +40,7 @@ export class CategoriaGastoService {
     console.log(array_temporal)
     if(array_temporal.length <= 0){
       array_final = await this.categoriaGastoRepository.find({
+        where : {tipoGasto : {id  : tipoGasto.id}},
         take: 5, // Obtener solo los primeros 5 registros
       });
     }else{
